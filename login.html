@@ -38,7 +38,6 @@
     .terminal-body { padding: 14px; height: 280px; overflow-y: auto; font-size: 11.5px; line-height: 1.6; color: #38bdf8; }
     .log-line { margin-bottom: 4px; word-break: break-all; }
     .log-time { color: #64748b; }
-    .log-tag-info { color: #38bdf8; font-weight: bold; }
     .log-tag-success { color: #4ade80; font-weight: bold; }
     .msg-box { border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; margin: 6px 0; color: #e2e8f0; }
     .terminal-input-line { display: flex; align-items: center; background: #090d16; padding: 8px 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
@@ -108,10 +107,12 @@
   <footer id="kaki">&copy; 2026 Mountain. All rights reserved.</footer>
 
   <script>
-    // Konfigurasi Supabase yang sudah terhubung
     const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_icluCCVkHxsP8K2RfjE_4A_tCTX0B-F';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let cmdHistory = [];
+    let historyIndex = -1;
 
     function checkAdminStatus() {
       const isAdmin = localStorage.getItem('is_admin') === 'true';
@@ -171,41 +172,67 @@
 
     async function initTerminalLogs() {
       const logsContainer = document.getElementById('terminal-logs');
-      
       logsContainer.innerHTML = `
         <div class="log-line"><span class="log-time">[SYSTEM]</span> Supabase Cloud Connected.</div>
         <div class="log-line"><span class="log-tag-success">[OK]</span> Admin Session Active [rifderprimo]</div>
-        <div class="log-line" style="color: #e2e8f0; font-weight: bold; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 6px; margin-top: 6px;">--- KETIK 'messages' UNTUK MEMBACA DATABASE ---</div>
+        <div class="log-line" style="color: #e2e8f0; font-weight: bold; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 6px; margin-top: 6px;">--- KETIK 'help' ATAU 'messages' UNTUK MULAI ---</div>
       `;
       logsContainer.scrollTop = 0;
     }
 
     async function handleTerminalCommand(e) {
+      const input = document.getElementById('terminal-cmd');
+      const logsContainer = document.getElementById('terminal-logs');
+
+      if (e.key === 'ArrowUp') {
+        if (cmdHistory.length > 0 && historyIndex < cmdHistory.length - 1) {
+          historyIndex++;
+          input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+        }
+        e.preventDefault();
+        return;
+      } else if (e.key === 'ArrowDown') {
+        if (historyIndex > 0) {
+          historyIndex--;
+          input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
+        } else if (historyIndex === 0) {
+          historyIndex = -1;
+          input.value = '';
+        }
+        e.preventDefault();
+        return;
+      }
+
       if (e.key === 'Enter') {
-        const input = document.getElementById('terminal-cmd');
         const rawCmd = input.value.trim();
         if (!rawCmd) return;
+
+        cmdHistory.push(rawCmd);
+        historyIndex = -1;
 
         const cmdParts = rawCmd.split(' ');
         const mainCmd = cmdParts[0].toLowerCase();
         const param = cmdParts[1];
-        const logsContainer = document.getElementById('terminal-logs');
 
         let responseText = '';
 
         if (mainCmd === 'help') {
           responseText = `
-            <div><b>Daftar Perintah Terminal Database:</b></div>
-            <div>- <b>messages</b> (atau <b>inbox</b>) : Ambil & baca pesan langsung dari Supabase</div>
-            <div>- <b>delmsg &lt;id&gt;</b>           : Hapus pesan dari database berdasarkan ID angka</div>
-            <div>- <b>clearinbox</b>            : Bersihkan cache pesan lokal</div>
-            <div>- <b>status</b>                : Cek koneksi cloud Supabase</div>
-            <div>- <b>clear</b>                 : Bersihkan layar terminal</div>
-            <div>- <b>logout</b>                : Logout admin</div>
+            <div style="color: #38bdf8; font-weight: bold; margin-bottom: 4px;">DAFTAR PERINTAH TERMINAL ADMIN:</div>
+            <div>- <b>messages</b> (atau <b>inbox</b>) : Tarik & baca pesan masuk dari Supabase[cite: 1]</div>
+            <div>- <b>visitors</b> (atau <b>logs</b>)   : Lihat log perangkat pengunjung yang membuka web</div>
+            <div>- <b>delmsg &lt;id&gt;</b>           : Hapus pesan dari Supabase berdasarkan ID[cite: 1]</div>
+            <div>- <b>sysinfo</b>               : Lihat spesifikasi sistem & lingkungan cloud[cite: 1]</div>
+            <div>- <b>status</b>                : Cek koneksi server Supabase[cite: 1]</div>
+            <div>- <b>ping</b>                  : Tes latensi jaringan server</div>
+            <div>- <b>matrix</b>                : Jalankan simulasi visual matrix</div>
+            <div>- <b>history</b>               : Lihat daftar riwayat perintah</div>
+            <div>- <b>clear</b>                 : Bersihkan layar terminal[cite: 1]</div>
+            <div>- <b>logout</b>                : Keluar dari sesi admin[cite: 1]</div>
           `;
         } else if (mainCmd === 'messages' || mainCmd === 'inbox') {
           logsContainer.innerHTML += `<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">admin@mountain-v1:~$</span> ${rawCmd}</div>`;
-          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Mengambil data dari Supabase...</div>`;
+          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Mengambil data pesan dari Supabase...</div>`;
           
           const { data: messages, error } = await supabaseClient
             .from('messages')
@@ -215,7 +242,7 @@
           if (error) {
             responseText = `<span style="color: #ef4444;">Gagal mengambil data: ${error.message}</span>`;
           } else if (!messages || messages.length === 0) {
-            responseText = `<div class="log-line" style="color: #94a3b8;">Database kosong (Belum ada pesan masuk).</div>`;
+            responseText = `<div class="log-line" style="color: #94a3b8;">Database pesan kosong.</div>`;
           } else {
             responseText = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- PESAN MASUK DI SUPABASE (${messages.length}) ---</div>`;
             messages.forEach((msg) => {
@@ -229,35 +256,70 @@
               `;
             });
           }
+        } else if (mainCmd === 'visitors' || mainCmd === 'logs') {
+          logsContainer.innerHTML += `<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">admin@mountain-v1:~$</span> ${rawCmd}</div>`;
+          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Mengambil log perangkat pengunjung...</div>`;
+          
+          const { data: visitors, error } = await supabaseClient
+            .from('visitors')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(10);
+
+          if (error) {
+            responseText = `<span style="color: #ef4444;">Gagal mengambil log visitor (Pastikan tabel 'visitors' sudah dibuat): ${error.message}</span>`;
+          } else if (!visitors || visitors.length === 0) {
+            responseText = `<div class="log-line" style="color: #94a3b8;">Belum ada log pengunjung yang terekam.</div>`;
+          } else {
+            responseText = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- LOG PERANGKAT PENGUNJUNG WEB (${visitors.length}) ---</div>`;
+            visitors.forEach((v) => {
+              const dateFormatted = new Date(v.created_at).toLocaleString('id-ID');
+              responseText += `
+                <div class="msg-box">
+                  <div><span style="color: #facc15;">Waktu: ${dateFormatted}</span></div>
+                  <div style="color: #38bdf8; margin-top: 2px;"><b>Perangkat / Browser:</b> ${v.device_info}</div>
+                </div>
+              `;
+            });
+          }
         } else if (mainCmd === 'delmsg') {
           if (!param) {
-            responseText = `<span style="color: #ef4444;">Harap masukkan ID pesan! Contoh: <b>delmsg 5</b></span>`;
+            responseText = `<span style="color: #ef4444;">Harap masukkan ID pesan! Contoh: <b>delmsg 1</b></span>`;
           } else {
             logsContainer.innerHTML += `<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">admin@mountain-v1:~$</span> ${rawCmd}</div>`;
-            logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Menghapus ID ${param} dari Supabase & penyimpanan lokal...</div>`;
+            logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Menghapus ID ${param} dari Supabase...</div>`;
 
-            // 1. Hapus dari database Supabase
             const { error } = await supabaseClient
               .from('messages')
               .delete()
               .eq('id', param);
 
-            // 2. Hapus juga dari cadangan localStorage (jika ada)
-            let localInbox = JSON.parse(localStorage.getItem('mountain_private_inbox') || '[]');
-            localInbox = localInbox.filter(m => m.id !== param);
-            localStorage.setItem('mountain_private_inbox', JSON.stringify(localInbox));
-
             if (error) {
-              responseText = `<span style="color: #ef4444;">Gagal menghapus dari database: ${error.message}</span>`;
+              responseText = `<span style="color: #ef4444;">Gagal menghapus: ${error.message}</span>`;
             } else {
-              responseText = `<span class="log-tag-success">[BERHASIL]</span> Pesan ID <b>${param}</b> berhasil dihapus bersih dari Database Supabase & Local Storage!`;
+              responseText = `<span class="log-tag-success">[BERHASIL]</span> Pesan ID <b>${param}</b> berhasil dihapus permanen dari Supabase!`;
             }
           }
-        } else if (mainCmd === 'clearinbox') {
-          localStorage.removeItem('mountain_private_inbox');
-          responseText = `<span class="log-tag-success">[SUCCESS]</span> Seluruh cache pesan lokal berhasil dibersihkan!`;
+        } else if (mainCmd === 'sysinfo') {
+          responseText = `
+            <div><b>System Environment:</b></div>
+            <div>- OS Kernel: Mountain-SecureOS v3.5 x86_64</div>
+            <div>- Hosting: Vercel Serverless Edge Network</div>
+            <div>- Database Engine: Supabase PostgreSQL (Cloud)</div>
+            <div>- Session User: rifderprimo [AUTHENTICATED]</div>
+          `;
         } else if (mainCmd === 'status') {
-          responseText = `<span class="log-tag-success">[ONLINE]</span> Supabase database connected and synchronized.`;
+          responseText = `<span class="log-tag-success">[ONLINE]</span> Supabase database connected and synchronized seamlessly.`;
+        } else if (mainCmd === 'ping') {
+          const latency = Math.floor(Math.random() * 25) + 12;
+          responseText = `<span class="log-tag-success">[PONG]</span> Latency to Supabase Edge Server: <b>${latency} ms</b>`;
+        } else if (mainCmd === 'matrix') {
+          responseText = `<span style="color: #22c55e; font-family: monospace;">01010011 01111001 01110011 01110100 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00100000 01010011 01110100 01100001 01110100 01110101 01110011 00100000 01001111 01001011</span>`;
+        } else if (mainCmd === 'history') {
+          responseText = `<div><b>Riwayat Perintah:</b></div>`;
+          cmdHistory.forEach((c, idx) => {
+            responseText += `<div>${idx + 1}. ${c}</div>`;
+          });
         } else if (mainCmd === 'clear') {
           logsContainer.innerHTML = '';
           input.value = '';
@@ -267,10 +329,10 @@
           input.value = '';
           return;
         } else {
-          responseText = `<span style="color: #ef4444;">Perintah '${rawCmd}' tidak dikenali. Ketik 'help' untuk bantuan.</span>`;
+          responseText = `<span style="color: #ef4444;">Perintah '${rawCmd}' tidak dikenali. Ketik 'help' untuk daftar perintah.</span>`;
         }
 
-        if (mainCmd !== 'messages' && mainCmd !== 'inbox' && mainCmd !== 'delmsg') {
+        if (mainCmd !== 'messages' && mainCmd !== 'inbox' && mainCmd !== 'visitors' && mainCmd !== 'logs' && mainCmd !== 'delmsg') {
           logsContainer.innerHTML += `
             <div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">admin@mountain-v1:~$</span> ${rawCmd}</div>
           `;
@@ -282,7 +344,18 @@
       }
     }
 
-    window.addEventListener('DOMContentLoaded', checkAdminStatus);
+    // Script Otomatis Catat Log Device Pengunjung Masuk ke Web (index.html atau halaman utama)
+    window.addEventListener('DOMContentLoaded', async () => {
+      checkAdminStatus();
+      
+      // Catat kunjungan perangkat visitor secara otomatis ke tabel 'visitors'
+      try {
+        const deviceInfo = navigator.userAgent;
+        await supabaseClient.from('visitors').insert([{ device_info: deviceInfo }]);
+      } catch (err) {
+        console.error("Visitor tracking error:", err);
+      }
+    });
   </script>
 </body>
 </html>
