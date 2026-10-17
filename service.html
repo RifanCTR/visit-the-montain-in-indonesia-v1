@@ -31,6 +31,17 @@
       display: none !important;
     }
 
+    /* Proteksi Gambar: Mencegah klik tahan / save gambar */
+    img {
+      -webkit-touch-callout: none !important;
+      -webkit-user-select: none !important;
+      -khtml-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+      pointer-events: none !important;
+    }
+
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -503,13 +514,13 @@
       <div class="developers-wrapper">
         <div class="developers-grid">
           <div class="developer-card" id="card-rifan" onclick="selectDev('rifan')">
-            <img src="assets/rifan.jpeg" alt="Rifan" class="dev-avatar">
+            <img src="assets/rifan.jpeg" alt="Rifan" class="dev-avatar" draggable="false">
             <h4 class="dev-name">Rifan</h4>
             <div class="dev-arrow"><i class="fa-solid fa-chevron-down"></i></div>
           </div>
 
           <div class="developer-card" id="card-agung" onclick="selectDev('agung')">
-            <img src="assets/agung.jpeg" alt="Agung" class="dev-avatar">
+            <img src="assets/agung.jpeg" alt="Agung" class="dev-avatar" draggable="false">
             <h4 class="dev-name">Agung</h4>
             <div class="dev-arrow"><i class="fa-solid fa-chevron-down"></i></div>
           </div>
