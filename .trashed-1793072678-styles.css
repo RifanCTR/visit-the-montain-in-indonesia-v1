@@ -1,0 +1,250 @@
+* {
+padding: 0px;
+margin: 0px;
+font-family: Helvetica;
+}
+
+body {
+ overflow-y: scroll;
+ background-color: black;
+ scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+@font-face {
+    font-family: 'Visit';
+    src: url('assets/fonts/Flash\ Card.otf') 
+    format('truetype');
+}
+@font-face {
+    font-family: 'Place';
+    src: url('assets/fonts/The\ Strange\ Girl.ttf') 
+    format('truetype');
+}
+@font-face {
+    font-family: 'Mountain';
+    src: url('assets/fonts/RasleyHeights_PERSONAL_USE_ONLY.otf') 
+    format('truetype');
+}
+
+.navbar {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 0 5%;
+ position: relative;
+}
+
+.nav-right,
+.nav-left {
+ display: flex;
+ width: 40%;
+ gap: 15px;
+ z-index: 1;
+}
+.nav-left{
+    justify-content: flex-start;
+}
+.nav-right{
+    justify-content: flex-end;
+}
+
+.nav-left a,
+.nav-right a{
+    font-size: 12px;
+    margin-left: 0;
+    font-family:cursive !important;
+
+}
+
+ul {
+ list-style-type: none;
+}
+
+li {
+ float: left;
+}
+
+a {
+ font-size: 12px;
+ margin-left: 15px;
+ text-decoration: none;
+ color: black;
+ font-weight: bold;
+ position: relative;
+ top: 10px;
+}
+
+a:hover {
+ color: white;
+ transition: 0.5s;
+}
+
+#text-logo {
+ display: inline-block;
+ padding: 5px 0px;
+ width: calc(100% - 1px);
+ text-align: center;
+ background: rgba(255, 255, 255, 0.1);
+ backdrop-filter: blur(5px);
+ -webkit-backdrop-filter: blur(15px);
+ border: 1px solid rgba(255, 255, 255, 0.2);
+ border-radius: 2px;
+ font-family:cursive !important;
+ position: absolute;
+ left: 50%;
+ transform: translateX(-50%);
+ color: black;
+ font-size: 18px;
+ letter-spacing: 5px;
+ top: 1px;
+}
+
+#text-1 {
+ text-align: center;
+ color: white;
+ font-weight: bold;
+ position: relative;
+ font-size: 15px;
+}
+
+#text-2 {
+ font-family: 'Visit', cursive !important;
+ font-size: 25px;
+ position: relative;
+ top: 25px;
+ text-align: center;
+ color: white;
+ margin: 20px;
+ font-weight: bold;
+ letter-spacing: 4px;
+}
+
+#text-3 {
+ text-align: center;
+ margin: 20px;
+ margin-bottom: 10px;
+ position: relative;
+ padding: 10px;
+ color: white;
+ font-size: 13px;
+}
+#text-4 {
+ position: relative;
+ bottom: 150px;
+ color: white;
+ text-align: center;
+ font-size: 10px;
+}
+
+#text-5 {
+ position: relative;
+ bottom: 150px;
+ color: white;
+ text-align: center;
+ margin-top: 3px;
+}
+
+#text-6 {
+ font-family: 'Place', cursive !important;
+ text-align: center;
+ padding-top: 10px;
+ color: white;
+}
+
+#text-7 {
+ font-family: 'Mountain', cursive !important;
+ text-align: center;
+ font-size: 14px;
+ color: white;
+}
+
+#button-1 {
+ bottom: 50px;
+ width: 130px;
+ height: 30px;
+ position: relative;
+ left: 115px;
+ color: white;
+ border: 1px solid white;
+ background-color: transparent;
+ margin-bottom: 100px;
+ cursor: pointer;
+}
+
+.container-2 {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: center;
+ max-width: 360px;
+ margin: 0 auto;
+}
+
+.container-3 {
+ background-color: transparent;
+ width: 140 px;
+ border-radius: 16px;
+ position: relative;
+ margin: 20px;
+ bottom: 150px;
+}
+
+.container-4 {
+ display: flex;
+ justify-content: center;
+}
+
+.container-5 {
+ position: relative;
+ bottom: 0px;
+ display: flex;
+ bottom: 75px;
+}
+
+.container-6 {
+ background-image: url(background.png);
+ background-size: cover;
+}
+.container-6, #button-1{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.container-6 #text-3{
+    bottom: 55px;
+}
+
+#text-6, #text-7 {
+ position: relative;
+ bottom: 65px;
+}
+
+#foto-1 {
+ width: 140px;
+ height: 250px;
+ padding: 0px;
+ border-radius: 16px;
+ object-fit: cover;
+}
+
+#gaya-1 {
+ transition: 0.7s;
+}
+
+#link-1 {
+ position: relative;
+ left: px;
+}
+
+#link-2 {
+ position: relative;
+ left: px;
+ padding: 0px;
+}
+

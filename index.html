@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Pertama - Portofolio Gunung Indonesia</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .navbar .nav-left a:first-child {
+      color: #ffffff !important;
+      font-weight: 600;
+    }
+
+    #perlengkapan {
+      padding-bottom: 10px !important;
+      margin-bottom: 20px !important;
+    }
+
+    /* Grid Brand Outdoor */
+    .brand-container-grid {
+      margin: 20px auto 15px auto !important;
+      width: 100%;
+      max-width: 900px;
+      padding: 0 10px;
+    }
+
+    .brand-grid-layout {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 20px 12px !important;
+      align-items: center;
+      justify-items: center;
+      width: 100%;
+    }
+
+    .brand-logo-anchor {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      opacity: 0.85;
+      width: 100%;
+      height: 65px;
+    }
+
+    .brand-logo-anchor:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .brand-logo-anchor img {
+      max-width: 100%;
+      max-height: 58px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .comment-section-yt {
+      width: 95%;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 10px;
+      color: #f1f1f1;
+      font-family: Roboto, Arial, sans-serif;
+    }
+
+    .comment-header-yt {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .comment-count-yt {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f1f1f1;
+    }
+
+    .yt-form-box {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 30px;
+      align-items: flex-start;
+    }
+
+    .yt-avatar-self {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #272727;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .yt-input-container {
+      flex: 1;
+      max-width: 500px;
+    }
+
+    .yt-input-field, 
+    .yt-input-container input[type="text"],
+    .yt-input-container textarea {
+      width: 100% !important;
+      height: auto !important;
+      min-height: unset !important;
+      background: transparent !important;
+      border: none !important;
+      border-bottom: 1px solid #3f3f3f !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      color: #fff !important;
+      font-size: 13px !important;
+      padding: 6px 0 !important;
+      margin: 0 0 10px 0 !important;
+      outline: none !important;
+      resize: none !important;
+      transition: border-color 0.2s !important;
+    }
+
+    .yt-input-field:focus,
+    .yt-input-container input[type="text"]:focus {
+      border-bottom-color: #f1f1f1 !important;
+    }
+
+    .yt-input-field::placeholder {
+      color: #888888 !important;
+      font-size: 12.5px !important;
+    }
+
+    .yt-form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .yt-btn-cancel {
+      background: transparent !important;
+      border: none !important;
+      color: #f1f1f1 !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      padding: 6px 14px !important;
+      border-radius: 18px !important;
+      cursor: pointer !important;
+    }
+
+    .yt-btn-cancel:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .yt-btn-submit {
+      background: #3ea6ff !important;
+      color: #0f0f0f !important;
+      border: none !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      padding: 6px 16px !important;
+      border-radius: 18px !important;
+      cursor: pointer !important;
+      transition: opacity 0.2s !important;
+    }
+
+    .yt-btn-submit:hover {
+      opacity: 0.9 !important;
+    }
+
+    .yt-comment-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .yt-comment-item {
+      display: flex;
+      gap: 16px;
+      position: relative;
+    }
+
+    .yt-comment-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #3f51b5;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 15px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    .yt-comment-body {
+      flex: 1;
+    }
+
+    .yt-comment-author {
+      font-size: 12px;
+      font-weight: 600;
+      color: #f1f1f1;
+      margin-bottom: 4px;
+    }
+
+    .yt-comment-text {
+      font-size: 13px;
+      line-height: 1.4;
+      color: #f1f1f1;
+      word-break: break-word;
+      margin-bottom: 8px;
+    }
+
+    .yt-comment-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .yt-action-btn {
+      background: transparent !important;
+      border: none !important;
+      color: #aaa !important;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .yt-action-btn:hover {
+      color: #f1f1f1 !important;
+    }
+
+    .yt-action-btn.active {
+      color: #3ea6ff !important;
+    }
+
+    .yt-more-menu {
+      position: relative;
+    }
+
+    .yt-more-btn {
+      background: transparent !important;
+      border: none !important;
+      color: #aaa !important;
+      font-size: 15px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .yt-comment-item:hover .yt-more-btn {
+      opacity: 1;
+    }
+
+    .yt-dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 24px;
+      background: #282828;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      z-index: 10;
+      min-width: 110px;
+      overflow: hidden;
+    }
+
+    .yt-dropdown-menu.show {
+      display: block;
+    }
+
+    .yt-dropdown-item {
+      padding: 10px 14px;
+      color: #ff4e4e;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .yt-dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 480px) {
+      .brand-container-grid {
+        margin: 15px auto 10px auto !important;
+      }
+      .brand-grid-layout {
+        gap: 12px 6px !important;
+      }
+      .brand-logo-anchor {
+        height: 52px;
+      }
+      .brand-logo-anchor img {
+        max-height: 45px;
+      }
+      .yt-more-btn {
+        opacity: 1;
+      }
+      .yt-input-container {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-6">
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+      </div>
+
+      <div class="logo">
+        <h1 id="text-logo">Mountain</h1>
+      </div>
+
+      <div class="nav-right">
+        <a href="service.html">Service</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+
+    <h2 id="text-2">VISIT THE MOUNTAINS <br>IN INDONESIA</h2>
+    <p id="text-3">An adventure in Indonesia, a global exploration of mountain wonders.</p>
+    
+    <div class="button-container">
+      <button id="button-1" type="button">VIEW MY WORK</button>
+    </div>
+  </div>
+
+  <div class="container-1" id="destinasi">
+    <p id="text-4">Confusion? These recommendations</p>
+    <h3 id="text-5">Destination Recommendation</h3>
+  </div>
+
+  <div class="container-cari">
+    <input id="tombol-cari" type="text" placeholder="Gunung apa yang ingin kamu daki?" aria-label="Cari gunung">
+    <button id="tombol-cari-2" type="button" aria-label="Cari"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+  </div>
+
+  <div class="container-13">
+    <div class="container-9" id="scroll-box-1">
+      <div class="container-10" id="row-1">
+        <figure class="mountain-card" data-name="rinjani"><img class="foto-gunung" src="assets/Gunung_Rinjani.jpg" alt="Gunung Rinjani"><figcaption>Rinjani</figcaption></figure>
+        <figure class="mountain-card" data-name="kerinci"><img class="foto-gunung" src="assets/Gunung_Kerinci.jpg" alt="Gunung Kerinci"><figcaption>Kerinci</figcaption></figure>
+        <figure class="mountain-card" data-name="semeru"><img class="foto-gunung" src="assets/Gunung_Semeru.jpg" alt="Gunung Semeru"><figcaption>Semeru</figcaption></figure>
+        <figure class="mountain-card" data-name="sumbing"><img class="foto-gunung" src="assets/Gunung_Sumbing.jpg" alt="Gunung Sumbing"><figcaption>Sumbing</figcaption></figure>
+        <figure class="mountain-card" data-name="andong"><img class="foto-gunung" src="assets/Gunung-Andong.jpg" alt="Gunung Andong"><figcaption>Andong</figcaption></figure>
+        <figure class="mountain-card" data-name="argopuro"><img class="foto-gunung" src="assets/Gunung-Argopuro.png" alt="Gunung Argopuro"><figcaption>Argopuro</figcaption></figure>
+        <figure class="mountain-card" data-name="arjuno"><img class="foto-gunung" src="assets/Gunung-Arjuno.jpg" alt="Gunung Arjuno"><figcaption>Arjuno</figcaption></figure>
+        <figure class="mountain-card" data-name="bromo"><img class="foto-gunung" src="assets/Gunung-Bromo.jpg" alt="Gunung Bromo"><figcaption>Bromo</figcaption></figure>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-13">
+    <div class="container-9" id="scroll-box-2">
+      <div class="container-11" id="row-2">
+        <figure class="mountain-card" data-name="cikurai"><img class="foto-gunung" src="assets/Gunung-Cikurai.jpg" alt="Gunung Cikurai"><figcaption>Cikurai</figcaption></figure>
+        <figure class="mountain-card" data-name="ciremai"><img class="foto-gunung" src="assets/Gunung-Ciremai.jpg" alt="Gunung Ciremai"><figcaption>Ciremai</figcaption></figure>
+        <figure class="mountain-card" data-name="dempo"><img class="foto-gunung" src="assets/Gunung-Dempo.jpg" alt="Gunung Dempo"><figcaption>Dempo</figcaption></figure>
+        <figure class="mountain-card" data-name="gede"><img class="foto-gunung" src="assets/Gunung-Gede.jpg" alt="Gunung Gede"><figcaption>Gede</figcaption></figure>
+        <figure class="mountain-card" data-name="guntur"><img class="foto-gunung" src="assets/Gunung-Guntur.jpg" alt="Gunung Guntur"><figcaption>Guntur</figcaption></figure>
+        <figure class="mountain-card" data-name="karang"><img class="foto-gunung" src="assets/Gunung-Karang.jpeg" alt="Gunung Karang"><figcaption>Karang</figcaption></figure>
+        <figure class="mountain-card" data-name="aseupan"><img class="foto-gunung" src="assets/Gunung-Aseupan.jpeg" alt="Gunung Aseupan"><figcaption>Aseupan</figcaption></figure>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-link" id="perlengkapan">
+    <h1 id="text-rekomendasi"><i class="fa-solid fa-medal"></i> Rekomendasi Brand Outdoor</h1>
+    
+    <div class="brand-container-grid">
+      <div class="brand-grid-layout">
+        <a href="https://www.merapimountain.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-merapi.png" alt="Merapi Mountain"></a>
+        <a href="https://www.eigeradventure.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-eiger.png" alt="Eiger"></a>
+        <a href="https://antarestar.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-antarestar.png" alt="Antarestar"></a>
+        <a href="https://foresteradventure.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-forester.png" alt="Forester"></a>
+        
+        <a href="https://avtechindonesia.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-avtech.png" alt="Avtech"></a>
+        <a href="https://www.sntaoutdoor.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-snta.png" alt="SNTA"></a>
+        <a href="https://www.osprey.com/" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-osprey.png" alt="Osprey"></a>
+        <a href="https://areioutdoorgear.co.id" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-rei.png" alt="Rei"></a>
+      </div>
+    </div>
+  </div>
+
+  <section class="comment-section-yt" id="contact">
+      <div class="comment-header-yt">
+        <span class="comment-count-yt" id="total-comments">0 Komentar</span>
+      </div>
+
+      <div class="yt-form-box">
+        <div class="yt-avatar-self"><i class="fa-solid fa-user"></i></div>
+        <div class="yt-input-container">
+          <input type="text" id="nama-komen" class="yt-input-field" placeholder="Nama Anda...">
+          <input type="text" id="komen" class="yt-input-field" placeholder="Tambahkan komentar...">
+          <div class="yt-form-actions">
+            <button type="button" class="yt-btn-cancel" onclick="resetForm()">Batal</button>
+            <button type="button" class="yt-btn-submit" onclick="kirimKomentar()">Komentar</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="daftar-komentar" class="yt-comment-list"></div>
+  </section>
+  
+  <footer id="kaki">
+    &copy; 2026 Mountain. All rights reserved.
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    AOS.init();
+
+    const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_icluCCVkHxsP8K2RfjE_4A_tCTX0B-F';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const searchInput = document.getElementById('tombol-cari');
+    const searchBtn = document.getElementById('tombol-cari-2');
+    const row1 = document.getElementById('row-1');
+    const row2 = document.getElementById('row-2');
+    const box1 = document.getElementById('scroll-box-1');
+    const box2 = document.getElementById('scroll-box-2');
+
+    let isPaused1 = false, isPaused2 = false;
+    let scrollSpeed1 = 0.8, scrollSpeed2 = -0.8;
+
+    window.addEventListener('load', () => {
+      box1.scrollLeft = row1.scrollWidth / 3;
+      box2.scrollLeft = row2.scrollWidth / 3;
+      muatKomentar();
+    });
+
+    function autoScroll() {
+      if (!isPaused1) {
+        box1.scrollLeft += scrollSpeed1;
+        if (box1.scrollLeft >= (row1.scrollWidth / 3) * 2) box1.scrollLeft = row1.scrollWidth / 3;
+        else if (box1.scrollLeft <= 0) box1.scrollLeft = row1.scrollWidth / 3;
+      }
+      if (!isPaused2) {
+        box2.scrollLeft += scrollSpeed2;
+        if (box2.scrollLeft >= (row2.scrollWidth / 3) * 2) box2.scrollLeft = row2.scrollWidth / 3;
+        else if (box2.scrollLeft <= 0) box2.scrollLeft = row2.scrollWidth / 3;
+      }
+      requestAnimationFrame(autoScroll);
+    }
+    requestAnimationFrame(autoScroll);
+
+    function handleSearch() {
+      const query = searchInput.value.toLowerCase().trim();
+      document.querySelectorAll('.mountain-card').forEach(card => card.classList.remove('highlight'));
+
+      if (query === "") {
+        isPaused1 = isPaused2 = false;
+        return;
+      }
+
+      const cardsRow1 = row1.querySelectorAll(`.mountain-card[data-name*="${query}"]`);
+      const found1 = cardsRow1[1] || cardsRow1[0];
+      const cardsRow2 = row2.querySelectorAll(`.mountain-card[data-name*="${query}"]`);
+      const found2 = cardsRow2[1] || cardsRow2[0];
+
+      if (found1) {
+        isPaused1 = true;
+        found1.classList.add('highlight');
+        box1.scrollTo({ left: found1.offsetLeft - (box1.clientWidth / 2) + (found1.clientWidth / 2), behavior: 'smooth' });
+      } else isPaused1 = false;
+
+      if (found2) {
+        isPaused2 = true;
+        found2.classList.add('highlight');
+        box2.scrollTo({ left: found2.offsetLeft - (box2.clientWidth / 2) + (found2.clientWidth / 2), behavior: 'smooth' });
+      } else isPaused2 = false;
+    }
+
+    searchInput.addEventListener('input', handleSearch);
+    searchBtn.addEventListener('click', handleSearch);
+
+    const bgColors = ['#e53935', '#d81b60', '#8e24aa', '#5e35b1', '#3949ab', '#1e88e5', '#00897b', '#43a047', '#fb8c00'];
+
+    function getAvatarColor(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      return bgColors[Math.abs(hash) % bgColors.length];
+    }
+
+    function getVotedComments() {
+      return JSON.parse(localStorage.getItem('device_voted_comments') || '{}');
+    }
+
+    function setVotedComment(id, type) {
+      const votes = getVotedComments();
+      if (type === null) {
+        delete votes[id];
+      } else {
+        votes[id] = type;
+      }
+      localStorage.setItem('device_voted_comments', JSON.stringify(votes));
+    }
+
+    async function muatKomentar() {
+      const container = document.getElementById('daftar-komentar');
+      const countHeader = document.getElementById('total-comments');
+
+      const { data: comments, error } = await _supabase
+        .from('comments')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        container.innerHTML = '<p style="color: #aaa; font-size: 12px;">Gagal memuat komentar.</p>';
+        return;
+      }
+
+      countHeader.textContent = `${comments ? comments.length : 0} Komentar`;
+      container.innerHTML = '';
+
+      if (!comments || comments.length === 0) {
+        container.innerHTML = '<p style="color: #aaa; font-size: 12px;">Belum ada komentar.</p>';
+        return;
+      }
+
+      const isAdmin = localStorage.getItem('is_admin') === 'true';
+      const userVotes = getVotedComments();
+
+      comments.forEach((item) => {
+        const char = item.nama ? item.nama.charAt(0).toUpperCase() : '?';
+        const color = getAvatarColor(item.nama || 'A');
+        const likesCount = item.likes || 0;
+        const dislikesCount = item.dislikes || 0;
+        const myVote = userVotes[item.id];
+
+        const div = document.createElement('div');
+        div.className = 'yt-comment-item';
+
+        let moreMenuHTML = '';
+        if (isAdmin) {
+          moreMenuHTML = `
+            <div class="yt-more-menu">
+              <button class="yt-more-btn" onclick="toggleDropdown(${item.id})"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+              <div class="yt-dropdown-menu" id="dropdown-${item.id}">
+                <div class="yt-dropdown-item" onclick="hapusKomentar(${item.id})">
+                  <i class="fa-solid fa-trash"></i> Hapus
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        div.innerHTML = `
+          <div class="yt-comment-avatar" style="background: ${color};">${char}</div>
+          <div class="yt-comment-body">
+            <div class="yt-comment-author">${escapeHtml(item.nama)}</div>
+            <div class="yt-comment-text">${escapeHtml(item.pesan)}</div>
+            <div class="yt-comment-actions">
+              <button class="yt-action-btn ${myVote === 'like' ? 'active' : ''}" onclick="handleReaction(${item.id}, 'like', ${likesCount}, ${dislikesCount})">
+                <i class="${myVote === 'like' ? 'fa-solid' : 'fa-regular'} fa-thumbs-up"></i> 
+                <span>${likesCount > 0 ? likesCount : ''}</span>
+              </button>
+              <button class="yt-action-btn ${myVote === 'dislike' ? 'active' : ''}" onclick="handleReaction(${item.id}, 'dislike', ${likesCount}, ${dislikesCount})">
+                <i class="${myVote === 'dislike' ? 'fa-solid' : 'fa-regular'} fa-thumbs-down"></i>
+              </button>
+            </div>
+          </div>
+          ${moreMenuHTML}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function kirimKomentar() {
+      const namaInput = document.getElementById('nama-komen');
+      const pesanInput = document.getElementById('komen');
+
+      const nama = namaInput.value.trim();
+      const pesan = pesanInput.value.trim();
+
+      if (!nama || !pesan) {
+        alert('Mohon isi nama dan komentar!');
+        return;
+      }
+
+      const { error } = await _supabase
+        .from('comments')
+        .insert([{ nama: nama, pesan: pesan, likes: 0, dislikes: 0 }]);
+
+      if (error) {
+        alert('Gagal mengirim komentar.');
+      } else {
+        resetForm();
+        muatKomentar();
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('nama-komen').value = '';
+      document.getElementById('komen').value = '';
+    }
+
+    async function handleReaction(id, type, currentLikes, currentDislikes) {
+      const userVotes = getVotedComments();
+      const previousVote = userVotes[id];
+
+      let newLikes = currentLikes;
+      let newDislikes = currentDislikes;
+      let newVoteType = type;
+
+      if (previousVote === type) {
+        if (type === 'like') newLikes = Math.max(0, currentLikes - 1);
+        if (type === 'dislike') newDislikes = Math.max(0, currentDislikes - 1);
+        newVoteType = null;
+      } else if (previousVote) {
+        if (previousVote === 'like' && type === 'dislike') {
+          newLikes = Math.max(0, currentLikes - 1);
+          newDislikes = currentDislikes + 1;
+        } else if (previousVote === 'dislike' && type === 'like') {
+          newDislikes = Math.max(0, currentDislikes - 1);
+          newLikes = currentLikes + 1;
+        }
+      } else {
+        if (type === 'like') newLikes = currentLikes + 1;
+        if (type === 'dislike') newDislikes = currentDislikes + 1;
+      }
+
+      const { error } = await _supabase
+        .from('comments')
+        .update({ likes: newLikes, dislikes: newDislikes })
+        .eq('id', id);
+
+      if (!error) {
+        setVotedComment(id, newVoteType);
+        muatKomentar();
+      }
+    }
+
+    function toggleDropdown(id) {
+      document.querySelectorAll('.yt-dropdown-menu').forEach(menu => {
+        if (menu.id !== `dropdown-${id}`) menu.classList.remove('show');
+      });
+      const target = document.getElementById(`dropdown-${id}`);
+      if (target) target.classList.toggle('show');
+    }
+
+    async function hapusKomentar(id) {
+      if (!confirm('Hapus komentar ini secara permanen?')) return;
+      const { error } = await _supabase.from('comments').delete().eq('id', id);
+      if (!error) {
+        muatKomentar();
+      } else {
+        alert('Gagal menghapus komentar!');
+      }
+    }
+
+    window.onclick = function(event) {
+      if (!event.target.matches('.yt-more-btn') && !event.target.matches('.fa-ellipsis-vertical')) {
+        document.querySelectorAll('.yt-dropdown-menu').forEach(menu => menu.classList.remove('show'));
+      }
+    }
+
+    function escapeHtml(text) {
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Service & Tech - Mountain Indonesia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { 
+      padding: 0; 
+      margin: 0; 
+      box-sizing: border-box; 
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      background-color: #0d0d0d;
+      color: #fff;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      width: 0px !important;
+      height: 0px !important;
+      display: none !important;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 5%;
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(20, 20, 20, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 10;
+    }
+
+    .nav-right, .nav-left { 
+      display: flex; 
+      gap: 15px; 
+      z-index: 2; 
+    }
+
+    .nav-left a, .nav-right a { 
+      font-size: 13px; 
+      text-decoration: none; 
+      color: #a3a3a3; 
+      font-family: cursive; 
+      font-weight: 600; 
+      transition: color 0.3s ease; 
+    }
+
+    .nav-left a:hover, .nav-right a:hover { 
+      color: #ffffff; 
+    }
+
+    #text-logo { 
+      color: #fff; 
+      font-size: 16px; 
+      letter-spacing: 3px; 
+      text-align: center; 
+      font-family: cursive; 
+    }
+
+    .service-container {
+      width: 95%; 
+      max-width: 700px; 
+      margin: 30px auto; 
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.03); 
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: 20px;
+    }
+
+    .service-container h1 { 
+      font-size: 20px; 
+      color: #ffffff; 
+      margin-bottom: 16px; 
+      text-align: center; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px; 
+    }
+
+    .service-card { 
+      background: rgba(255, 255, 255, 0.04); 
+      border: 1px solid rgba(255, 255, 255, 0.06); 
+      padding: 14px; 
+      border-radius: 14px; 
+      margin-bottom: 14px; 
+    }
+
+    .service-card h3 { 
+      font-size: 14px; 
+      color: #fff; 
+      margin-bottom: 8px; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+    }
+
+    .service-card p { 
+      color: #9ca3af; 
+      font-size: 11.5px; 
+      line-height: 1.5; 
+      text-align: left;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    @media(min-width: 480px) {
+      .tech-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .tech-badge {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 8px 6px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .tech-badge:hover {
+      border-color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .tech-badge i, .tech-badge svg {
+      font-size: 18px;
+      color: #ffffff;
+      width: 18px;
+      height: 18px;
+    }
+
+    .tech-badge span {
+      font-size: 10px;
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+
+    .developers-wrapper {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 14px 10px;
+    }
+
+    .developers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; 
+      gap: 10px; 
+    }
+
+    .developer-card {
+      text-align: center;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
+    }
+
+    .developer-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .developer-card.active {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #ffffff;
+    }
+
+    .dev-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ffffff;
+      margin: 0 auto 6px auto;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .dev-name {
+      font-size: 13px;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .dev-arrow {
+      font-size: 10px;
+      color: #ffffff;
+      margin-top: 2px;
+      transition: transform 0.3s ease;
+    }
+
+    .developer-card.active .dev-arrow {
+      transform: rotate(180deg);
+    }
+
+    .dev-panel-container {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .dev-panel-container.show {
+      max-height: 280px;
+      opacity: 1;
+    }
+
+    .dev-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 12px 0 10px 0;
+    }
+
+    .dev-panel-content {
+      padding: 0 4px;
+      text-align: left;
+    }
+
+    .dev-role {
+      font-size: 10.5px;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .dev-desc {
+      font-size: 10.5px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+      line-height: 1.5;
+      text-align: justify;
+    }
+
+    .dev-socials {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .dev-socials a {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 11px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .dev-socials a:hover {
+      background: #ffffff;
+      color: #111;
+      border-color: #ffffff;
+    }
+
+    .admin-login-box {
+      margin-top: 15px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .admin-btn {
+      background: #ffffff;
+      color: #111;
+      border: none;
+      padding: 9px 20px;
+      font-size: 11.5px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+    }
+
+    .admin-btn:hover {
+      background: #e5e5e5;
+      transform: translateY(-1px);
+    }
+
+    #section-main-content {
+      display: block;
+    }
+
+    #section-login-page {
+      display: none;
+      max-width: 420px;
+      margin: 40px auto;
+      background: rgba(18, 18, 18, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+
+    .login-header-icon {
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .login-form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .login-form-group label {
+      display: block;
+      font-size: 11.5px;
+      color: #d1d5db;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .password-input-wrapper {
+      position: relative;
+    }
+
+    .login-form-group input {
+      width: 100%;
+      padding: 11px 14px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 12.5px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .login-form-group input:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 8px rgba(255,255,255,0.2);
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #9ca3af;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .toggle-password-btn:hover {
+      color: #fff;
+    }
+
+    .btn-submit-login {
+      width: 100%;
+      padding: 12px;
+      background: #ffffff;
+      color: #111;
+      border: none;
+      font-weight: bold;
+      font-size: 12.5px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-submit-login:hover {
+      background: #e5e5e5;
+    }
+
+    .btn-back-service {
+      background: transparent;
+      border: none;
+      color: #9ca3af;
+      font-size: 11.5px;
+      cursor: pointer;
+      margin-top: 14px;
+      display: block;
+      text-align: center;
+      width: 100%;
+      transition: color 0.2s;
+    }
+
+    .btn-back-service:hover {
+      color: #fff;
+    }
+
+    #kaki { 
+      color: #737373; 
+      text-align: center; 
+      background-color: #0d0d0d; 
+      padding: 20px; 
+      font-size: 12px; 
+      border-top: 1px solid rgba(255,255,255,0.05); 
+      margin-top: 40px; 
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="logo">
+      <h1 id="text-logo">Mountain</h1>
+    </div>
+    <div class="nav-right">
+      <a href="service.html" style="color: #ffffff;">Service</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <div class="service-container" id="section-main-content">
+    <h1><i class="fa-solid fa-code"></i> Teknologi & Tim Pengembang</h1>
+    
+    <div class="service-card">
+      <h3><i class="fa-solid fa-laptop-code" style="color: #ffffff;"></i> Teknologi & Infrastruktur Web</h3>
+      <p>Website ini dibangun menggunakan stack teknologi modern serta didukung sistem penyimpanan dan hosting performa tinggi agar responsif di berbagai perangkat:</p>
+      
+      <div class="tech-grid">
+        <div class="tech-badge">
+          <i class="fa-brands fa-html5" style="color: #e34f26;"></i>
+          <span>HTML5</span>
+        </div>
+        <div class="tech-badge">
+          <i class="fa-brands fa-css3-alt" style="color: #1572b6;"></i>
+          <span>CSS3</span>
+        </div>
+        <div class="tech-badge">
+          <i class="fa-brands fa-js" style="color: #f7df1e;"></i>
+          <span>JavaScript</span>
+        </div>
+        <div class="tech-badge">
+          <i class="fa-brands fa-python" style="color: #3776ab;"></i>
+          <span>Python</span>
+        </div>
+        <div class="tech-badge">
+          <i class="fa-solid fa-database" style="color: #00758f;"></i>
+          <span>MySQL</span>
+        </div>
+        <div class="tech-badge">
+          <i class="fa-solid fa-bolt" style="color: #3ecf8e;"></i>
+          <span>Supabase</span>
+        </div>
+        <div class="tech-badge">
+          <i class="fa-brands fa-github" style="color: #ffffff;"></i>
+          <span>GitHub</span>
+        </div>
+        <div class="tech-badge">
+          <svg viewBox="0 0 76 65" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;">
+            <path d="M37.5274 0L75.0548 65H0L37.5274 0Z" fill="#ffffff"/>
+          </svg>
+          <span>Vercel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <h3><i class="fa-solid fa-users-gear" style="color: #ffffff;"></i> Tim Pengembang</h3>
+      
+      <div class="developers-wrapper">
+        <div class="developers-grid">
+          <div class="developer-card" id="card-rifan" onclick="selectDev('rifan')">
+            <img src="assets/rifan.jpeg" alt="Rifan" class="dev-avatar">
+            <h4 class="dev-name">Rifan</h4>
+            <div class="dev-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+          </div>
+
+          <div class="developer-card" id="card-agung" onclick="selectDev('agung')">
+            <img src="assets/agung.jpeg" alt="Agung" class="dev-avatar">
+            <h4 class="dev-name">Agung</h4>
+            <div class="dev-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+          </div>
+        </div>
+
+        <div class="dev-panel-container" id="panel-container">
+          <div class="dev-divider"></div>
+          
+          <div class="dev-panel-content" id="content-rifan" style="display: none;">
+            <p class="dev-role">UI/UX & Backend Dev</p>
+            <p class="dev-desc">Bertanggung jawab penuh dalam perancangan estetika antarmuka pengguna, pengaturan tata letak visual, serta pengembangan arsitektur database dan infrastruktur sistem backend yang kokoh guna memastikan seluruh logika di balik layar berjalan dengan aman, optimal, dan terintegrasi sempurna.</p>
+            <div class="dev-socials">
+              <a href="https://github.com/RifanCTR" target="_blank" aria-label="GitHub Rifan"><i class="fa-brands fa-github"></i></a>
+              <a href="https://www.instagram.com/ipan9.2?xtok=eWVrYzY5bm4zNXJ1" target="_blank" aria-label="Instagram Rifan"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+          </div>
+
+          <div class="dev-panel-content" id="content-agung" style="display: none;">
+            <p class="dev-role">Frontend Developer</p>
+            <p class="dev-desc">Berfokus pada implementasi desain visual menjadi halaman web yang fungsional, memanfaatkan struktur HTML dan CSS modern yang responsif, serta mengembangkan animasi interaktif berbasis JavaScript untuk memberikan pengalaman penjelajahan yang luar biasa bagi para pengunjung.</p>
+            <div class="dev-socials">
+              <a href="https://github.com/Deryy1" target="_blank" aria-label="GitHub Agung"><i class="fa-brands fa-github"></i></a>
+              <a href="https://www.instagram.com/deryyyderr?cplk=YjRzZTRwaGNjdW0w" target="_blank" aria-label="Instagram Agung"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-login-box">
+        <div style="font-size: 13px; font-weight: bold; color: #fff; margin-bottom: 4px;"><i class="fa-solid fa-shield-halved"></i> Area Pengelola</div>
+        <p style="color: #9ca3af; font-size: 11px; margin-bottom: 12px;" id="admin-status-text">Sistem dilindungi enkripsi penuh.</p>
+        <button class="admin-btn" id="btn-admin-action" onclick="switchToLoginView()">Login Admin</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="section-login-page">
+    <div class="login-header-icon"><i class="fa-solid fa-fingerprint"></i></div>
+    <h2 style="font-size: 16px; margin-bottom: 4px; color: #fff; text-align: center;">Autentikasi Admin</h2>
+    <p style="font-size: 11.5px; color: #9ca3af; text-align: center; margin-bottom: 20px;">Masukkan kredensial terenkripsi untuk masuk ke panel kontrol.</p>
+    
+    <div class="login-form-group">
+      <label for="input-username">Username</label>
+      <input type="text" id="input-username" placeholder="Masukkan username...">
+    </div>
+
+    <div class="login-form-group">
+      <label for="input-password">Password</label>
+      <div class="password-input-wrapper">
+        <input type="password" id="input-password" placeholder="Masukkan password...">
+        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()"><i class="fa-solid fa-eye" id="eye-icon"></i></button>
+      </div>
+    </div>
+
+    <button type="button" class="btn-submit-login" onclick="processAdminLogin()">Verifikasi</button>
+    <button type="button" class="btn-back-service" onclick="switchToMainView()">Kembali ke Halaman Service</button>
+  </div>
+
+  <footer id="kaki">&copy; 2026 Mountain. All rights reserved.</footer>
+
+  <script>
+    let currentActive = null;
+
+    function selectDev(name) {
+      const panel = document.getElementById('panel-container');
+      const contentRifan = document.getElementById('content-rifan');
+      const contentAgung = document.getElementById('content-agung');
+      const cardRifan = document.getElementById('card-rifan');
+      const cardAgung = document.getElementById('card-agung');
+
+      if (currentActive === name) {
+        panel.classList.remove('show');
+        cardRifan.classList.remove('active');
+        cardAgung.classList.remove('active');
+        setTimeout(() => {
+          contentRifan.style.display = 'none';
+          contentAgung.style.display = 'none';
+        }, 300);
+        currentActive = null;
+        return;
+      }
+
+      currentActive = name;
+      cardRifan.classList.remove('active');
+      cardAgung.classList.remove('active');
+      
+      contentRifan.style.display = 'none';
+      contentAgung.style.display = 'none';
+
+      if (name === 'rifan') {
+        cardRifan.classList.add('active');
+        contentRifan.style.display = 'block';
+      } else if (name === 'agung') {
+        cardAgung.classList.add('active');
+        contentAgung.style.display = 'block';
+      }
+
+      panel.classList.add('show');
+    }
+
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('input-password');
+      const eyeIcon = document.getElementById('eye-icon');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+
+    function switchToLoginView() {
+      const isAdmin = localStorage.getItem('is_admin') === 'true';
+      if (isAdmin) {
+        if (confirm('Keluar dari sesi admin?')) {
+          localStorage.setItem('is_admin', 'false');
+          alert('Berhasil logout admin.');
+          updateAdminUI();
+        }
+        return;
+      }
+
+      document.getElementById('section-main-content').style.display = 'none';
+      document.getElementById('section-login-page').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchToMainView() {
+      document.getElementById('section-login-page').style.display = 'none';
+      document.getElementById('section-main-content').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function processAdminLogin() {
+      const user = document.getElementById('input-username').value.trim();
+      const pass = document.getElementById('input-password').value.trim();
+
+      const correctUser = 'rifderprimo';
+      const correctPass = 'blackcipher';
+
+      if (user === correctUser && pass === correctPass) {
+        localStorage.setItem('is_admin', 'true');
+        alert('Autentikasi Berhasil! Mengarahkan ke panel komentar...');
+        window.location.replace('index.html#contact');
+      } else {
+        alert('Username atau Password salah!');
+      }
+    }
+
+    function updateAdminUI() {
+      const isAdmin = localStorage.getItem('is_admin') === 'true';
+      const statusText = document.getElementById('admin-status-text');
+      const btnAction = document.getElementById('btn-admin-action');
+
+      if (isAdmin) {
+        statusText.innerHTML = "Status: <b style='color: #22c55e;'>Sesi Admin Aktif</b>";
+        btnAction.textContent = "Logout Admin";
+      } else {
+        statusText.textContent = "Sistem dilindungi enkripsi penuh.";
+        btnAction.textContent = "Login Admin";
+      }
+    }
+
+    window.addEventListener('load', updateAdminUI);
+  </script>
+</body>
+</html>
