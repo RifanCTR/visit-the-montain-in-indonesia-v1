@@ -302,33 +302,6 @@
       border-color: #ffffff;
     }
 
-    .admin-login-box {
-      margin-top: 15px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .admin-btn {
-      background: #ffffff;
-      color: #111;
-      border: none;
-      padding: 9px 20px;
-      font-size: 11.5px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(255,255,255,0.1);
-    }
-
-    .admin-btn:hover {
-      background: #e5e5e5;
-      transform: translateY(-1px);
-    }
-
     #section-main-content {
       display: block;
     }
@@ -445,6 +418,15 @@
       border-top: 1px solid rgba(255,255,255,0.05); 
       margin-top: 40px; 
     }
+
+    #kaki span.secret-admin {
+      color: #737373;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    #kaki span.secret-admin:hover {
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -548,12 +530,6 @@
           </div>
         </div>
       </div>
-
-      <div class="admin-login-box">
-        <div style="font-size: 13px; font-weight: bold; color: #fff; margin-bottom: 4px;"><i class="fa-solid fa-shield-halved"></i> Area Pengelola</div>
-        <p style="color: #9ca3af; font-size: 11px; margin-bottom: 12px;" id="admin-status-text">Sistem dilindungi enkripsi penuh.</p>
-        <button class="admin-btn" id="btn-admin-action" onclick="switchToLoginView()">Login Admin</button>
-      </div>
     </div>
   </div>
 
@@ -579,8 +555,7 @@
     <button type="button" class="btn-back-service" onclick="switchToMainView()">Kembali ke Halaman Service</button>
   </div>
 
-  <footer id="kaki">&copy; 2026 Mountain. All rights reserved.</footer>
-
+  <footer id="kaki">&copy; 2026 <a href="login.html" style="color: #737373; text-decoration: none;">Mountain</a>. All rights reserved.</footer>
   <script>
     let currentActive = null;
 
@@ -641,7 +616,6 @@
         if (confirm('Keluar dari sesi admin?')) {
           localStorage.setItem('is_admin', 'false');
           alert('Berhasil logout admin.');
-          updateAdminUI();
         }
         return;
       }
@@ -672,22 +646,6 @@
         alert('Username atau Password salah!');
       }
     }
-
-    function updateAdminUI() {
-      const isAdmin = localStorage.getItem('is_admin') === 'true';
-      const statusText = document.getElementById('admin-status-text');
-      const btnAction = document.getElementById('btn-admin-action');
-
-      if (isAdmin) {
-        statusText.innerHTML = "Status: <b style='color: #22c55e;'>Sesi Admin Aktif</b>";
-        btnAction.textContent = "Logout Admin";
-      } else {
-        statusText.textContent = "Sistem dilindungi enkripsi penuh.";
-        btnAction.textContent = "Login Admin";
-      }
-    }
-
-    window.addEventListener('load', updateAdminUI);
   </script>
 </body>
 </html>
