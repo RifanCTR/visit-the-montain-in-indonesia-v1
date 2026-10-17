@@ -6,55 +6,41 @@
   <meta name="color-scheme" content="dark">
   <title>Secure Core Terminal - Mountain OS</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { padding: 0; margin: 0; box-sizing: border-box; font-family: 'Consolas', 'Courier New', monospace; }
     html, body { width: 100%; min-height: 100vh; background-color: #030712; color: #f8fafc; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; }
-    
     .main-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 16px; }
-    
     .login-container { width: 100%; max-width: 420px; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(56, 189, 248, 0.3); padding: 28px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); text-align: center; }
     .login-header-icon { font-size: 32px; color: #38bdf8; margin-bottom: 12px; }
     h1 { font-size: 15px; margin-bottom: 8px; color: #fff; }
-    
     .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 11.5px; font-weight: bold; margin-bottom: 16px; }
     .status-badge.active { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
     .status-badge.inactive { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-    
     .login-form-group { margin-bottom: 16px; text-align: left; }
     .login-form-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 6px; font-weight: bold; }
     .password-input-wrapper { position: relative; }
     .login-form-group input { width: 100%; padding: 11px 14px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; color: #fff; font-size: 12.5px; outline: none; font-family: 'Consolas', monospace; }
     .toggle-password-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 14px; }
-    
     .btn-submit-login { width: 100%; padding: 12px; background: #38bdf8; color: #030712; border: none; font-weight: bold; font-size: 12.5px; border-radius: 8px; cursor: pointer; margin-top: 8px; font-family: 'Consolas', monospace; }
     .btn-submit-login:hover { background: #0ea5e9; }
-    .btn-submit-login:disabled { opacity: 0.6; cursor: wait; }
-    
     .btn-logout { width: 100%; padding: 12px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); font-weight: bold; font-size: 12.5px; border-radius: 8px; cursor: pointer; margin-top: 8px; font-family: 'Consolas', monospace; }
     .sub-desc { font-size: 11.5px; color: #94a3b8; margin-bottom: 14px; line-height: 1.5; }
-    
     .btn-back-home { display: inline-block; color: #64748b; font-size: 11px; text-decoration: none; margin-top: 16px; }
-    .btn-back-home:hover { color: #38bdf8; }
-
     .terminal-container { width: 90%; max-width: 750px; margin: 20px auto 0 auto; background: #030712; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9); overflow: hidden; text-align: left; }
     .terminal-header { background: #0f172a; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(56, 189, 248, 0.2); }
     .terminal-title { font-size: 11px; color: #38bdf8; display: flex; align-items: center; gap: 6px; }
     .terminal-controls { display: flex; gap: 6px; }
     .dot { width: 10px; height: 10px; border-radius: 50%; }
     .dot.red { background: #ef4444; } .dot.yellow { background: #f59e0b; } .dot.green { background: #10b981; }
-    
     .terminal-body { padding: 14px; height: 320px; overflow-y: auto; font-size: 11.5px; line-height: 1.6; color: #38bdf8; }
     .log-line { margin-bottom: 4px; word-break: break-all; }
     .log-time { color: #475569; }
     .log-tag-success { color: #4ade80; font-weight: bold; }
     .msg-box { border: 1px solid rgba(56, 189, 248, 0.2); background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 6px; margin: 8px 0; color: #e2e8f0; }
-    
     .terminal-input-line { display: flex; align-items: center; background: #020617; padding: 8px 14px; border-top: 1px solid rgba(56, 189, 248, 0.2); }
     .terminal-prompt { color: #4ade80; font-size: 11.5px; margin-right: 8px; font-weight: bold; }
     .terminal-input { flex: 1; background: none; border: none; color: #f8fafc; font-family: 'Consolas', monospace; font-size: 11.5px; outline: none; }
-    
     #kaki { width: 100%; color: #475569; text-align: center; padding: 15px; font-size: 11px; border-top: 1px solid rgba(56, 189, 248, 0.1); }
     [hidden] { display: none !important; }
   </style>
@@ -67,7 +53,6 @@
       <h1>ROOT AUTHENTICATION</h1>
       <div id="status-badge-box" class="status-badge inactive"><i class="fa-solid fa-circle-xmark"></i> STATUS: UNAUTHORIZED</div>
 
-      <!-- Form Login -->
       <form id="login-form">
         <div class="login-form-group">
           <label for="input-username">UID_IDENTIFIER</label>
@@ -77,15 +62,14 @@
           <label for="input-password">SEC_PASSPHRASE</label>
           <div class="password-input-wrapper">
             <input type="password" id="input-password" autocomplete="current-password" required maxlength="1024" placeholder="Enter security key...">
-            <button type="button" class="toggle-password-btn" id="toggle-password" aria-label="Show password"><i class="fa-solid fa-eye" id="eye-icon"></i></button>
+            <button type="button" class="toggle-password-btn" id="toggle-password"><i class="fa-solid fa-eye" id="eye-icon"></i></button>
           </div>
         </div>
         <button type="submit" class="btn-submit-login" id="login-button">EXECUTE LOGIN</button>
       </form>
 
-      <!-- Panel Jika Sudah Login -->
       <div id="logged-in-area" hidden>
-        <p class="sub-desc">Root privileges granted via secure token. Full database terminal unlocked.</p>
+        <p class="sub-desc">Root privileges granted via secure API. Terminal unlocked.</p>
         <button type="button" class="btn-submit-login" style="margin-bottom: 8px;" onclick="goToAdminPanel()">OPEN WEB CONSOLE</button>
         <button type="button" class="btn-logout" id="logout-btn"><i class="fa-solid fa-power-off"></i> TERMINATE SESSION</button>
       </div>
@@ -93,7 +77,6 @@
       <a href="index.html" class="btn-back-home">&lt;&lt; Return to Public Root</a>
     </section>
 
-    <!-- Terminal Admin -->
     <section class="terminal-container" id="admin-terminal" hidden>
       <div class="terminal-header">
         <div class="terminal-title"><i class="fa-solid fa-terminal" style="color: #38bdf8;"></i> root@mountain-core:~# (Secure API Shell)</div>
@@ -114,10 +97,7 @@
       'use strict';
       const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
       const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_icluCCVkHxsP8K2RfjE_4A_tCTX0B-F';
-      
-      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-      });
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
       let cmdHistory = [];
       let historyIndex = -1;
@@ -131,53 +111,33 @@
         document.getElementById('terminal-logs').scrollTop = document.getElementById('terminal-logs').scrollHeight; 
       };
 
-      async function getSession() {
-        const { data, error } = await client.auth.getSession();
-        if (error) throw error;
-        return data.session;
-      }
-
-      async function refreshUI() {
-        try {
-          const session = await getSession();
-          const isSignedIn = !!session;
-          
-          document.getElementById('login-form').hidden = isSignedIn;
-          document.getElementById('logged-in-area').hidden = !isSignedIn;
-          document.getElementById('admin-terminal').hidden = true;
-          
-          const badge = document.getElementById('status-badge-box');
-          if (isSignedIn) {
-            badge.className = 'status-badge active';
-            badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> STATUS: ROOT_ONLINE`;
-          } else {
-            badge.className = 'status-badge inactive';
-            badge.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> STATUS: UNAUTHORIZED`;
-          }
-        } catch (err) {
-          console.error("Session check error:", err);
+      function refreshUI() {
+        const isAuth = localStorage.getItem('is_admin') === 'true';
+        document.getElementById('login-form').hidden = isAuth;
+        document.getElementById('logged-in-area').hidden = !isAuth;
+        document.getElementById('admin-terminal').hidden = true;
+        
+        const badge = document.getElementById('status-badge-box');
+        if (isAuth) {
+          badge.className = 'status-badge active';
+          badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> STATUS: ROOT_ONLINE`;
+        } else {
+          badge.className = 'status-badge inactive';
+          badge.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> STATUS: UNAUTHORIZED`;
         }
       }
 
       async function callAdminAPI(action, body = {}) {
-        const session = await getSession();
-        if (!session?.access_token) throw new Error('Session expired. Please sign in again.');
-        
         const response = await fetch('/api/admin/' + encodeURIComponent(action), {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + session.access_token 
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body)
         });
-        
         const payload = await response.json().catch(() => ({ error: 'Invalid server response' }));
-        if (!response.ok) throw new Error(payload.error || 'Request failed (' + response.status + ')');
+        if (!response.ok) throw new Error(payload.error || 'Request failed');
         return payload;
       }
 
-      // Toggle Password Visibility
       document.getElementById('toggle-password').addEventListener('click', () => {
         const p = document.getElementById('input-password');
         const eye = document.getElementById('eye-icon');
@@ -186,7 +146,6 @@
         eye.className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
       });
 
-      // Proses Login via API Backend Vercel
       document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('login-button');
@@ -203,20 +162,14 @@
           });
 
           const result = await response.json().catch(() => ({}));
-          if (!response.ok || !result.session) throw new Error(result.error || 'Invalid credentials');
+          if (!response.ok || !result.success) throw new Error(result.error || 'Invalid credentials');
 
-          const { error } = await client.auth.setSession({
-            access_token: result.session.access_token,
-            refresh_token: result.session.refresh_token
-          });
-          if (error) throw error;
-
-          await callAdminAPI('check');
-          await refreshUI();
+          localStorage.setItem('is_admin', 'true');
+          refreshUI();
           document.getElementById('input-password').value = '';
-          alert('[SYSTEM_AUTH]: Root verification successful.');
+          alert('[SYSTEM_AUTH]: Root verification successful. Welcome, ' + result.username + '!');
         } catch (err) {
-          await client.auth.signOut();
+          localStorage.setItem('is_admin', 'false');
           alert('[SEC_WARN]: Access denied. ' + err.message);
           refreshUI();
         } finally {
@@ -240,19 +193,18 @@
         }
       });
 
-      document.getElementById('logout-btn').addEventListener('click', async () => {
+      document.getElementById('logout-btn').addEventListener('click', () => {
         if (confirm('Confirm session termination?')) {
-          await client.auth.signOut();
+          localStorage.setItem('is_admin', 'false');
           document.getElementById('admin-terminal').hidden = true;
           document.getElementById('terminal-logs').innerHTML = '';
-          await refreshUI();
+          refreshUI();
           alert('[SYSTEM]: Session closed safely.');
         }
       });
 
       window.goToAdminPanel = () => { window.location.replace('index.html#contact'); };
 
-      // Perintah Terminal
       document.getElementById('command-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const input = document.getElementById('terminal-cmd');
@@ -297,13 +249,12 @@
               <div>- OS Kernel: Mountain-SecureOS v3.8-Hardened</div>
               <div>- Edge Network: Vercel Serverless Function Proxy</div>
               <div>- Database: Supabase PostgreSQL Cloud Cluster</div>
-              <div>- Auth Engine: Supabase Auth + Token Verification</div>
             `);
           } else if (cmd === 'ping') {
             const latency = Math.floor(Math.random() * 15) + 8;
             log('<span class="log-tag-success">[PONG]</span> Round-trip latency to Edge node: <b>' + latency + ' ms</b>');
           } else if (cmd === 'matrix') {
-            log('<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00100000 01001111 01001011</span>');
+            log('<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00101100 00100000 01001111 01001011</span>');
           } else if (cmd === 'history') {
             let histHtml = '<div><b>COMMAND HISTORY:</b></div>';
             cmdHistory.forEach((c, idx) => { histHtml += `<div>[${idx + 1}] ${esc(c)}</div>`; });
@@ -359,11 +310,7 @@
         }
       });
 
-      client.auth.onAuthStateChange(() => {
-        setTimeout(() => refreshUI().catch(() => {}), 0);
-      });
-
-      refreshUI().catch(() => {});
+      refreshUI();
     })();
   </script>
 </body>
