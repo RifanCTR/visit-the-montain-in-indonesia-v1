@@ -73,14 +73,10 @@
   <footer id="kaki">&copy; 2026 Mountain. All rights reserved.</footer>
 
   <script>
-    // Inisialisasi Supabase (Ganti URL & ANON_KEY sesuai project Supabase kamu jika ada)
-    const SUPABASE_URL = "https://your-supabase-url.supabase.co"; 
-    const SUPABASE_ANON_KEY = "your-anon-key";
-    let _supabase = null;
-
-    if (SUPABASE_URL !== "https://your-supabase-url.supabase.co") {
-      _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
+    // Konfigurasi Supabase aknan dinsert
+    const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_icluCCVkHxsP8K2RfjE_4A_tCTX0B-F';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('contact-form');
     const statusMsg = document.getElementById('status-msg');
@@ -98,44 +94,38 @@
       btn.disabled = true;
       btn.textContent = "Mengirim...";
       statusMsg.style.color = "#9ca3af";
-      statusMsg.textContent = "Mengirim pesan...";
+      statusMsg.textContent = "Menyimpan ke database & mengirim...";
 
-      const now = new Date();
-      const timeStr = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-
-      // 1. Simpan ke Local Database Browser (Backup Sempurna)
-      const storedInbox = JSON.parse(localStorage.getItem('mountain_private_inbox') || '[]');
-      const newMsg = {
-        id: Math.floor(1000 + Math.random() * 9000).toString(),
-        nama: nama,
-        email: email,
-        pesan: pesan,
-        time: timeStr
-      };
-      storedInbox.unshift(newMsg);
-      localStorage.setItem('mountain_private_inbox', JSON.stringify(storedInbox));
-
-      // 2. Simpan ke Supabase jika terhubung
-      if (_supabase) {
-        try {
-          await _supabase.from('messages').insert([{ nama, email, pesan, created_at: new Date() }]);
-        } catch (err) { console.error("Supabase Error:", err); }
-      }
-
-      // 3. Kirim ke Telegram API Vercel
       try {
-        await fetch('/api/send-message', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nama, email, pesan })
-        });
-      } catch (err) { console.error("Telegram Error:", err); }
+        // 1. Mang-insert data agturong iti Supabase table 'messages'
+        const { error: dbError } = await supabaseClient
+          .from('messages')
+          .insert([{ nama, email, pesan }]);
 
-      statusMsg.style.color = "#ffffff";
-      statusMsg.textContent = "Pesan berhasil terkirim!";
-      form.reset();
-      btn.disabled = false;
-      btn.textContent = "Kirim Pesan";
+        if (dbError) throw dbError;
+
+        // 2. Agtuloy nga ag-fetch iti Vercel API para iti Telegram notification (no adda)
+        try {
+          await fetch('/api/send-message', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nama, email, pesan })
+          });
+        } catch (err) {
+          console.error("Telegram notification error:", err);
+        }
+
+        statusMsg.style.color = "#4ade80";
+        statusMsg.textContent = "Pesan berhasil terkirim!";
+        form.reset();
+      } catch (error) {
+        console.error("Supabase insert error:", error);
+        statusMsg.style.color = "#ef4444";
+        statusMsg.textContent = "Gagal mengirim pesan: " + error.message;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Kirim Pesan";
+      }
     });
   </script>
 </body>
