@@ -80,6 +80,27 @@
       margin-bottom: 10px;
     }
 
+    .status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .status-badge.active {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-badge.inactive {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
     .login-form-group {
       margin-bottom: 16px;
       text-align: left;
@@ -148,6 +169,25 @@
       background: #e5e5e5;
     }
 
+    .btn-logout {
+      width: 100%;
+      padding: 12px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      font-weight: bold;
+      font-size: 12.5px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: rgba(239, 68, 68, 0.3);
+      color: #ff6b6b;
+    }
+
     .btn-back-home {
       display: inline-block;
       color: #9ca3af;
@@ -189,30 +229,59 @@
   </nav>
 
   <div class="login-container">
-    <div class="login-header-icon"><i class="fa-solid fa-fingerprint"></i></div>
-    <h2 style="font-size: 16px; margin-bottom: 4px; color: #fff;">Autentikasi Admin</h2>
-    <p style="font-size: 11.5px; color: #9ca3af; margin-bottom: 20px;">Masukkan kredensial terenkripsi untuk masuk ke panel kontrol.</p>
+    <div class="login-header-icon"><i class="fa-solid fa-user-shield"></i></div>
+    <h2 style="font-size: 16px; margin-bottom: 8px; color: #fff;">Autentikasi Admin</h2>
     
-    <div class="login-form-group">
-      <label for="input-username">Username</label>
-      <input type="text" id="input-username" placeholder="Masukkan username...">
-    </div>
+    <div id="status-badge-box"></div>
 
-    <div class="login-form-group">
-      <label for="input-password">Password</label>
-      <div class="password-input-wrapper">
-        <input type="password" id="input-password" placeholder="Masukkan password...">
-        <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()"><i class="fa-solid fa-eye" id="eye-icon"></i></button>
+    <div id="login-form-area">
+      <div class="login-form-group">
+        <label for="input-username">Username</label>
+        <input type="text" id="input-username" placeholder="Masukkan username...">
       </div>
+
+      <div class="login-form-group">
+        <label for="input-password">Password</label>
+        <div class="password-input-wrapper">
+          <input type="password" id="input-password" placeholder="Masukkan password...">
+          <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()"><i class="fa-solid fa-eye" id="eye-icon"></i></button>
+        </div>
+      </div>
+
+      <button type="button" class="btn-submit-login" onclick="processAdminLogin()">Verifikasi & Login</button>
     </div>
 
-    <button type="button" class="btn-submit-login" onclick="processAdminLogin()">Verifikasi</button>
+    <div id="logged-in-area" style="display: none;">
+      <p style="font-size: 12px; color: #9ca3af; margin-bottom: 14px; line-height: 1.5;">
+        Kamu memiliki akses penuh ke fitur pengelola komentar & admin.
+      </p>
+      <button type="button" class="btn-submit-login" style="margin-bottom: 8px;" onclick="goToAdminPanel()">Ke Panel Komentar Admin</button>
+      <button type="button" class="btn-logout" onclick="processAdminLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout Sesi Admin</button>
+    </div>
+
     <a href="index.html" class="btn-back-home">Kembali ke Beranda</a>
   </div>
 
   <footer id="kaki">&copy; 2026 Mountain. All rights reserved.</footer>
 
   <script>
+    function checkAdminStatus() {
+      const isAdmin = localStorage.getItem('is_admin') === 'true';
+      const statusBadgeBox = document.getElementById('status-badge-box');
+      const loginFormArea = document.getElementById('login-form-area');
+      const loggedInArea = document.getElementById('logged-in-area');
+
+      if (isAdmin) {
+        statusBadgeBox.innerHTML = `<div class="status-badge active"><i class="fa-solid fa-circle-check"></i> Status: Admin Aktif (Sesi Terhubung)</div>`;
+        loginFormArea.style.display = 'none';
+        loggedInArea.style.display = 'block';
+      } else {
+        statusBadgeBox.innerHTML = `<div class="status-badge inactive"><i class="fa-solid fa-circle-xmark"></i> Status: Belum Login</div>`;
+        loginFormArea.style.display = 'block';
+        loggedInArea.style.display = 'none';
+      }
+    }
+
     function togglePasswordVisibility() {
       const passInput = document.getElementById('input-password');
       const eyeIcon = document.getElementById('eye-icon');
@@ -231,17 +300,34 @@
       const user = document.getElementById('input-username').value.trim();
       const pass = document.getElementById('input-password').value.trim();
 
-      const correctUser = 'rifderprimo';
-      const correctPass = 'blackcipher';
+      const encodedUser = btoa(user);
+      const encodedPass = btoa(pass);
 
-      if (user === correctUser && pass === correctPass) {
+      const targetUser = 'cmlmZGVycHJpbW8=';
+      const targetPass = 'YmxhY2tjaXBoZXI=';
+
+      if (encodedUser === targetUser && encodedPass === targetPass) {
         localStorage.setItem('is_admin', 'true');
-        alert('Autentikasi Berhasil! Mengarahkan ke panel komentar...');
-        window.location.replace('index.html#contact');
+        alert('Autentikasi Berhasil! Kamu sekarang aktif sebagai Admin.');
+        checkAdminStatus();
       } else {
         alert('Username atau Password salah!');
       }
     }
+
+    function processAdminLogout() {
+      if (confirm('Yakin mau keluar dari sesi admin?')) {
+        localStorage.setItem('is_admin', 'false');
+        alert('Berhasil Logout!');
+        checkAdminStatus();
+      }
+    }
+
+    function goToAdminPanel() {
+      window.location.replace('index.html#contact');
+    }
+
+    window.addEventListener('DOMContentLoaded', checkAdminStatus);
   </script>
 </body>
 </html>
