@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Project Pertama - Portofolio Gunung Indonesia</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* Proteksi Gambar: Mencegah klik tahan / save gambar */
+    img.foto-gunung, .brand-logo-anchor img {
+      -webkit-touch-callout: none !important;
+      -webkit-user-select: none !important;
+      -khtml-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+      pointer-events: none !important;
+    }
+
     .navbar .nav-left a:first-child {
       color: #ffffff !important;
       font-weight: 600;
@@ -361,31 +371,47 @@
     <button id="tombol-cari-2" type="button" aria-label="Cari"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
   </div>
 
+  <!-- BARIS 1 SLIDER -->
   <div class="container-13">
     <div class="container-9" id="scroll-box-1">
       <div class="container-10" id="row-1">
-        <figure class="mountain-card" data-name="rinjani"><img class="foto-gunung" src="assets/Gunung_Rinjani.jpg" alt="Gunung Rinjani"><figcaption>Rinjani</figcaption></figure>
-        <figure class="mountain-card" data-name="kerinci"><img class="foto-gunung" src="assets/Gunung_Kerinci.jpg" alt="Gunung Kerinci"><figcaption>Kerinci</figcaption></figure>
-        <figure class="mountain-card" data-name="semeru"><img class="foto-gunung" src="assets/Gunung_Semeru.jpg" alt="Gunung Semeru"><figcaption>Semeru</figcaption></figure>
-        <figure class="mountain-card" data-name="sumbing"><img class="foto-gunung" src="assets/Gunung_Sumbing.jpg" alt="Gunung Sumbing"><figcaption>Sumbing</figcaption></figure>
-        <figure class="mountain-card" data-name="andong"><img class="foto-gunung" src="assets/Gunung-Andong.jpg" alt="Gunung Andong"><figcaption>Andong</figcaption></figure>
-        <figure class="mountain-card" data-name="argopuro"><img class="foto-gunung" src="assets/Gunung-Argopuro.png" alt="Gunung Argopuro"><figcaption>Argopuro</figcaption></figure>
-        <figure class="mountain-card" data-name="arjuno"><img class="foto-gunung" src="assets/Gunung-Arjuno.jpg" alt="Gunung Arjuno"><figcaption>Arjuno</figcaption></figure>
-        <figure class="mountain-card" data-name="bromo"><img class="foto-gunung" src="assets/Gunung-Bromo.jpg" alt="Gunung Bromo"><figcaption>Bromo</figcaption></figure>
+        <figure class="mountain-card" data-name="rinjani"><img class="foto-gunung" src="assets/Gunung_Rinjani.jpg" alt="Gunung Rinjani" draggable="false"><figcaption>Rinjani</figcaption></figure>
+        <figure class="mountain-card" data-name="kerinci"><img class="foto-gunung" src="assets/Gunung_Kerinci.jpg" alt="Gunung Kerinci" draggable="false"><figcaption>Kerinci</figcaption></figure>
+        <figure class="mountain-card" data-name="semeru"><img class="foto-gunung" src="assets/Gunung_Semeru.jpg" alt="Gunung Semeru" draggable="false"><figcaption>Semeru</figcaption></figure>
+        <figure class="mountain-card" data-name="sumbing"><img class="foto-gunung" src="assets/Gunung_Sumbing.jpg" alt="Gunung Sumbing" draggable="false"><figcaption>Sumbing</figcaption></figure>
+        <figure class="mountain-card" data-name="andong"><img class="foto-gunung" src="assets/Gunung-Andong.jpg" alt="Gunung Andong" draggable="false"><figcaption>Andong</figcaption></figure>
+        <figure class="mountain-card" data-name="argopuro"><img class="foto-gunung" src="assets/Gunung-Argopuro.png" alt="Gunung Argopuro" draggable="false"><figcaption>Argopuro</figcaption></figure>
+        <figure class="mountain-card" data-name="arjuno"><img class="foto-gunung" src="assets/Gunung-Arjuno.jpg" alt="Gunung Arjuno" draggable="false"><figcaption>Arjuno</figcaption></figure>
+        <figure class="mountain-card" data-name="aseupan"><img class="foto-gunung" src="assets/Gunung-Aseupan.jpeg" alt="Gunung Aseupan" draggable="false"><figcaption>Aseupan</figcaption></figure>
+        <figure class="mountain-card" data-name="bromo"><img class="foto-gunung" src="assets/Gunung-Bromo.jpg" alt="Gunung Bromo" draggable="false"><figcaption>Bromo</figcaption></figure>
+        <figure class="mountain-card" data-name="cikurai"><img class="foto-gunung" src="assets/Gunung-Cikurai.jpg" alt="Gunung Cikurai" draggable="false"><figcaption>Cikurai</figcaption></figure>
+        <figure class="mountain-card" data-name="ciremai"><img class="foto-gunung" src="assets/Gunung-Ciremai.jpg" alt="Gunung Ciremai" draggable="false"><figcaption>Ciremai</figcaption></figure>
+        <figure class="mountain-card" data-name="dempo"><img class="foto-gunung" src="assets/Gunung-Dempo.jpg" alt="Gunung Dempo" draggable="false"><figcaption>Dempo</figcaption></figure>
+        <figure class="mountain-card" data-name="gede"><img class="foto-gunung" src="assets/Gunung-Gede.jpg" alt="Gunung Gede" draggable="false"><figcaption>Gede</figcaption></figure>
+        <figure class="mountain-card" data-name="guntur"><img class="foto-gunung" src="assets/Gunung-Guntur.jpg" alt="Gunung Guntur" draggable="false"><figcaption>Guntur</figcaption></figure>
+        <figure class="mountain-card" data-name="karang"><img class="foto-gunung" src="assets/Gunung-Karang.jpeg" alt="Gunung Karang" draggable="false"><figcaption>Karang</figcaption></figure>
       </div>
     </div>
   </div>
 
+  <!-- BARIS 2 SLIDER -->
   <div class="container-13">
     <div class="container-9" id="scroll-box-2">
       <div class="container-11" id="row-2">
-        <figure class="mountain-card" data-name="cikurai"><img class="foto-gunung" src="assets/Gunung-Cikurai.jpg" alt="Gunung Cikurai"><figcaption>Cikurai</figcaption></figure>
-        <figure class="mountain-card" data-name="ciremai"><img class="foto-gunung" src="assets/Gunung-Ciremai.jpg" alt="Gunung Ciremai"><figcaption>Ciremai</figcaption></figure>
-        <figure class="mountain-card" data-name="dempo"><img class="foto-gunung" src="assets/Gunung-Dempo.jpg" alt="Gunung Dempo"><figcaption>Dempo</figcaption></figure>
-        <figure class="mountain-card" data-name="gede"><img class="foto-gunung" src="assets/Gunung-Gede.jpg" alt="Gunung Gede"><figcaption>Gede</figcaption></figure>
-        <figure class="mountain-card" data-name="guntur"><img class="foto-gunung" src="assets/Gunung-Guntur.jpg" alt="Gunung Guntur"><figcaption>Guntur</figcaption></figure>
-        <figure class="mountain-card" data-name="karang"><img class="foto-gunung" src="assets/Gunung-Karang.jpeg" alt="Gunung Karang"><figcaption>Karang</figcaption></figure>
-        <figure class="mountain-card" data-name="aseupan"><img class="foto-gunung" src="assets/Gunung-Aseupan.jpeg" alt="Gunung Aseupan"><figcaption>Aseupan</figcaption></figure>
+        <figure class="mountain-card" data-name="lauser"><img class="foto-gunung" src="assets/Gunung-Lauser.jpg" alt="Gunung Lauser" draggable="false"><figcaption>Lauser</figcaption></figure>
+        <figure class="mountain-card" data-name="lawu"><img class="foto-gunung" src="assets/Gunung-Lawu.jpg" alt="Gunung Lawu" draggable="false"><figcaption>Lawu</figcaption></figure>
+        <figure class="mountain-card" data-name="luhur"><img class="foto-gunung" src="assets/Gunung-Luhur.jpg" alt="Gunung Luhur" draggable="false"><figcaption>Luhur</figcaption></figure>
+        <figure class="mountain-card" data-name="merbabu"><img class="foto-gunung" src="assets/Gunung-Merbabu.jpg" alt="Gunung Merbabu" draggable="false"><figcaption>Merbabu</figcaption></figure>
+        <figure class="mountain-card" data-name="pangrango"><img class="foto-gunung" src="assets/Gunung-Pangrango.jpg" alt="Gunung Pangrango" draggable="false"><figcaption>Pangrango</figcaption></figure>
+        <figure class="mountain-card" data-name="papandayan"><img class="foto-gunung" src="assets/Gunung-Papandayan.jpg" alt="Gunung Papandayan" draggable="false"><figcaption>Papandayan</figcaption></figure>
+        <figure class="mountain-card" data-name="penanggungan"><img class="foto-gunung" src="assets/Gunung-Penanggungan.jpg" alt="Gunung Penanggungan" draggable="false"><figcaption>Penanggungan</figcaption></figure>
+        <figure class="mountain-card" data-name="prau"><img class="foto-gunung" src="assets/Gunung-Prau.jpg" alt="Gunung Prau" draggable="false"><figcaption>Prau</figcaption></figure>
+        <figure class="mountain-card" data-name="pulosari"><img class="foto-gunung" src="assets/Gunung-Pulosari.jpg" alt="Gunung Pulosari" draggable="false"><figcaption>Pulosari</figcaption></figure>
+        <figure class="mountain-card" data-name="raung"><img class="foto-gunung" src="assets/Gunung-Raung.jpg" alt="Gunung Raung" draggable="false"><figcaption>Raung</figcaption></figure>
+        <figure class="mountain-card" data-name="salak"><img class="foto-gunung" src="assets/Gunung-Salak.jpg" alt="Gunung Salak" draggable="false"><figcaption>Salak</figcaption></figure>
+        <figure class="mountain-card" data-name="sindoro"><img class="foto-gunung" src="assets/Gunung-Sindoro.jpg" alt="Gunung Sindoro" draggable="false"><figcaption>Sindoro</figcaption></figure>
+        <figure class="mountain-card" data-name="slamet"><img class="foto-gunung" src="assets/Gunung-Slamet.jpg" alt="Gunung Slamet" draggable="false"><figcaption>Slamet</figcaption></figure>
+        <figure class="mountain-card" data-name="thampomas"><img class="foto-gunung" src="assets/Gunung-Thampomas.jpg" alt="Gunung Thampomas" draggable="false"><figcaption>Thampomas</figcaption></figure>
       </div>
     </div>
   </div>
@@ -395,15 +421,15 @@
     
     <div class="brand-container-grid">
       <div class="brand-grid-layout">
-        <a href="https://www.merapimountain.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-merapi.png" alt="Merapi Mountain"></a>
-        <a href="https://www.eigeradventure.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-eiger.png" alt="Eiger"></a>
-        <a href="https://antarestar.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-antarestar.png" alt="Antarestar"></a>
-        <a href="https://foresteradventure.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-forester.png" alt="Forester"></a>
+        <a href="https://www.merapimountain.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-merapi.png" alt="Merapi Mountain" draggable="false"></a>
+        <a href="https://www.eigeradventure.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-eiger.png" alt="Eiger" draggable="false"></a>
+        <a href="https://antarestar.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-antarestar.png" alt="Antarestar" draggable="false"></a>
+        <a href="https://foresteradventure.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-forester.png" alt="Forester" draggable="false"></a>
         
-        <a href="https://avtechindonesia.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-avtech.png" alt="Avtech"></a>
-        <a href="https://www.sntaoutdoor.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-snta.png" alt="SNTA"></a>
-        <a href="https://www.osprey.com/" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-osprey.png" alt="Osprey"></a>
-        <a href="https://areioutdoorgear.co.id" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-rei.png" alt="Rei"></a>
+        <a href="https://avtechindonesia.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-avtech.png" alt="Avtech" draggable="false"></a>
+        <a href="https://www.sntaoutdoor.com" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-snta.png" alt="SNTA" draggable="false"></a>
+        <a href="https://www.osprey.com/" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-osprey.png" alt="Osprey" draggable="false"></a>
+        <a href="https://areioutdoorgear.co.id" target="_blank" rel="noopener noreferrer" class="brand-logo-anchor"><img src="assets/logo-rei.png" alt="Rei" draggable="false"></a>
       </div>
     </div>
   </div>
@@ -435,7 +461,6 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-
     AOS.init();
 
     const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
@@ -448,30 +473,53 @@
     const row2 = document.getElementById('row-2');
     const box1 = document.getElementById('scroll-box-1');
     const box2 = document.getElementById('scroll-box-2');
+    const viewWorkBtn = document.getElementById('button-1');
 
     let isPaused1 = false, isPaused2 = false;
-    let scrollSpeed1 = 0.8, scrollSpeed2 = -0.8;
+    let scrollSpeed1 = 0.5, scrollSpeed2 = -0.5;
+    let singleWidth1 = 0, singleWidth2 = 0;
+
+    // Otomatis duplikat baris via JS agar HTML tetap bersih
+    row1.innerHTML = row1.innerHTML + row1.innerHTML + row1.innerHTML;
+    row2.innerHTML = row2.innerHTML + row2.innerHTML + row2.innerHTML;
 
     window.addEventListener('load', () => {
-      box1.scrollLeft = row1.scrollWidth / 3;
-      box2.scrollLeft = row2.scrollWidth / 3;
+      singleWidth1 = row1.scrollWidth / 3;
+      singleWidth2 = row2.scrollWidth / 3;
+
+      box1.scrollLeft = singleWidth1;
+      box2.scrollLeft = singleWidth2;
       muatKomentar();
     });
 
+    // Auto Scroll Seamless tanpa jeda/patah
     function autoScroll() {
-      if (!isPaused1) {
+      if (!isPaused1 && singleWidth1 > 0) {
         box1.scrollLeft += scrollSpeed1;
-        if (box1.scrollLeft >= (row1.scrollWidth / 3) * 2) box1.scrollLeft = row1.scrollWidth / 3;
-        else if (box1.scrollLeft <= 0) box1.scrollLeft = row1.scrollWidth / 3;
+        if (box1.scrollLeft >= singleWidth1 * 2) {
+          box1.scrollLeft -= singleWidth1;
+        } else if (box1.scrollLeft <= 0) {
+          box1.scrollLeft += singleWidth1;
+        }
       }
-      if (!isPaused2) {
+
+      if (!isPaused2 && singleWidth2 > 0) {
         box2.scrollLeft += scrollSpeed2;
-        if (box2.scrollLeft >= (row2.scrollWidth / 3) * 2) box2.scrollLeft = row2.scrollWidth / 3;
-        else if (box2.scrollLeft <= 0) box2.scrollLeft = row2.scrollWidth / 3;
+        if (box2.scrollLeft >= singleWidth2 * 2) {
+          box2.scrollLeft -= singleWidth2;
+        } else if (box2.scrollLeft <= 0) {
+          box2.scrollLeft += singleWidth2;
+        }
       }
       requestAnimationFrame(autoScroll);
     }
     requestAnimationFrame(autoScroll);
+
+    // Fitur Klik Tombol "VIEW MY WORK" mengarah ke Destination Recommendation
+    viewWorkBtn.addEventListener('click', () => {
+      const destinasiSection = document.getElementById('destinasi');
+      destinasiSection.scrollIntoView({ behavior: 'smooth' });
+    });
 
     function handleSearch() {
       const query = searchInput.value.toLowerCase().trim();
@@ -490,18 +538,29 @@
       if (found1) {
         isPaused1 = true;
         found1.classList.add('highlight');
-        box1.scrollTo({ left: found1.offsetLeft - (box1.clientWidth / 2) + (found1.clientWidth / 2), behavior: 'smooth' });
-      } else isPaused1 = false;
+        const targetScroll = found1.offsetLeft - (box1.clientWidth / 2) + (found1.clientWidth / 2);
+        box1.scrollTo({ left: targetScroll, behavior: 'smooth' });
+      } else {
+        isPaused1 = false;
+      }
 
       if (found2) {
         isPaused2 = true;
         found2.classList.add('highlight');
-        box2.scrollTo({ left: found2.offsetLeft - (box2.clientWidth / 2) + (found2.clientWidth / 2), behavior: 'smooth' });
-      } else isPaused2 = false;
+        const targetScroll2 = found2.offsetLeft - (box2.clientWidth / 2) + (found2.clientWidth / 2);
+        box2.scrollTo({ left: targetScroll2, behavior: 'smooth' });
+      } else {
+        isPaused2 = false;
+      }
     }
 
     searchInput.addEventListener('input', handleSearch);
     searchBtn.addEventListener('click', handleSearch);
+
+    box1.addEventListener('touchstart', () => { isPaused1 = true; });
+    box1.addEventListener('touchend', () => { if(!searchInput.value) setTimeout(() => { isPaused1 = false; }, 2000); });
+    box2.addEventListener('touchstart', () => { isPaused2 = true; });
+    box2.addEventListener('touchend', () => { if(!searchInput.value) setTimeout(() => { isPaused2 = false; }, 2000); });
 
     const bgColors = ['#e53935', '#d81b60', '#8e24aa', '#5e35b1', '#3949ab', '#1e88e5', '#00897b', '#43a047', '#fb8c00'];
 
@@ -689,15 +748,14 @@
       return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     }
     
-console.log("WAAH KEPO BET LU JADI ORANG\nGak usah ngereceh nyari celah di sini, bree. Kalo emang kurang kerjaan, coba deh ketik git() terus ENTER");
+    console.log("WAAH KEPO BET LU JADI ORANG\nGak usah ngereceh nyari celah di sini, bree. Kalo emang kurang kerjaan, coba deh ketik kepo() terus ENTER");
 
-    window.git = function() {
-      console.log("WKWKWK KELIATAN BANGET BEGONYA");
+    window.kepo = function() {
+      console.log("WKWKWK KELIATAN BANGET KEPONYA");
       setTimeout(() => {
         window.location.href = "bug.html";
-      }, 3000);
+      }, 700);
     };
-  
   </script>
 </body>
 </html>
