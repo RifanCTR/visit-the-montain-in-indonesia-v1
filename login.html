@@ -35,11 +35,11 @@
     .terminal-controls { display: flex; gap: 6px; }
     .dot { width: 10px; height: 10px; border-radius: 50%; }
     .dot.red { background: #ef4444; } .dot.yellow { background: #f59e0b; } .dot.green { background: #10b981; }
-    .terminal-body { padding: 14px; height: 280px; overflow-y: auto; font-size: 11.5px; line-height: 1.6; color: #38bdf8; }
+    .terminal-body { padding: 14px; height: 320px; overflow-y: auto; font-size: 11.5px; line-height: 1.6; color: #38bdf8; }
     .log-line { margin-bottom: 4px; word-break: break-all; }
     .log-time { color: #64748b; }
     .log-tag-success { color: #4ade80; font-weight: bold; }
-    .msg-box { border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; margin: 6px 0; color: #e2e8f0; }
+    .msg-box { border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin: 8px 0; color: #e2e8f0; }
     .terminal-input-line { display: flex; align-items: center; background: #090d16; padding: 8px 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
     .terminal-prompt { color: #4ade80; font-size: 11.5px; margin-right: 8px; font-weight: bold; }
     .terminal-input { flex: 1; background: none; border: none; color: #f8fafc; font-family: 'Consolas', 'Courier New', monospace; font-size: 11.5px; outline: none; }
@@ -175,7 +175,7 @@
       logsContainer.innerHTML = `
         <div class="log-line"><span class="log-time">[SYSTEM]</span> Supabase Cloud Connected.</div>
         <div class="log-line"><span class="log-tag-success">[OK]</span> Admin Session Active [rifderprimo]</div>
-        <div class="log-line" style="color: #e2e8f0; font-weight: bold; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 6px; margin-top: 6px;">--- KETIK 'help' ATAU 'messages' UNTUK MULAI ---</div>
+        <div class="log-line" style="color: #e2e8f0; font-weight: bold; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 6px; margin-top: 6px;">--- KETIK 'messages' UNTUK MELIHAT SEMUA PESAN ---</div>
       `;
       logsContainer.scrollTop = 0;
     }
@@ -219,10 +219,10 @@
         if (mainCmd === 'help') {
           responseText = `
             <div style="color: #38bdf8; font-weight: bold; margin-bottom: 4px;">DAFTAR PERINTAH TERMINAL ADMIN:</div>
-            <div>- <b>messages</b> (atau <b>inbox</b>) : Tarik & baca pesan masuk dari Supabase[cite: 1]</div>
-            <div>- <b>visitors</b> (atau <b>logs</b>)   : Lihat log perangkat pengunjung yang membuka web</div>
+            <div>- <b>messages</b> (atau <b>inbox</b>) : Tampilkan SEMUA data pesan database[cite: 1]</div>
+            <div>- <b>visitors</b> (atau <b>logs</b>)   : Tampilkan log perangkat & IP asli pengunjung</div>
             <div>- <b>delmsg &lt;id&gt;</b>           : Hapus pesan dari Supabase berdasarkan ID[cite: 1]</div>
-            <div>- <b>sysinfo</b>               : Lihat spesifikasi sistem & lingkungan cloud[cite: 1]</div>
+            <div>- <b>sysinfo</b>               : Lihat spesifikasi sistem cloud[cite: 1]</div>
             <div>- <b>status</b>                : Cek koneksi server Supabase[cite: 1]</div>
             <div>- <b>ping</b>                  : Tes latensi jaringan server</div>
             <div>- <b>matrix</b>                : Jalankan simulasi visual matrix</div>
@@ -232,7 +232,7 @@
           `;
         } else if (mainCmd === 'messages' || mainCmd === 'inbox') {
           logsContainer.innerHTML += `<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">admin@mountain-v1:~$</span> ${rawCmd}</div>`;
-          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Mengambil data pesan dari Supabase...</div>`;
+          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Mengambil SELURUH data pesan dari Supabase...</div>`;
           
           const { data: messages, error } = await supabaseClient
             .from('messages')
@@ -242,42 +242,42 @@
           if (error) {
             responseText = `<span style="color: #ef4444;">Gagal mengambil data: ${error.message}</span>`;
           } else if (!messages || messages.length === 0) {
-            responseText = `<div class="log-line" style="color: #94a3b8;">Database pesan kosong.</div>`;
+            responseText = `<div class="log-line" style="color: #94a3b8;">Database pesan kosong (Belum ada pesan masuk).</div>`;
           } else {
-            responseText = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- PESAN MASUK DI SUPABASE (${messages.length}) ---</div>`;
+            responseText = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- SELURUH PESAN MASUK DI SUPABASE (${messages.length}) ---</div>`;
             messages.forEach((msg) => {
               const dateFormatted = new Date(msg.created_at).toLocaleString('id-ID');
               responseText += `
                 <div class="msg-box">
-                  <div><span style="color: #facc15;">ID Database: ${msg.id}</span> | <span style="color: #94a3b8;">${dateFormatted}</span></div>
-                  <div><b>Pengirim:</b> ${msg.nama} (${msg.email})</div>
-                  <div style="margin-top: 4px; color: #38bdf8;"><b>Pesan:</b> "${msg.pesan}"</div>
+                  <div><span style="color: #facc15; font-weight: bold;">ID Database: #${msg.id}</span> | <span style="color: #94a3b8;">${dateFormatted}</span></div>
+                  <div style="margin-top: 4px;"><b>Pengirim:</b> ${msg.nama} (<span style="color: #38bdf8;">${msg.email}</span>)</div>
+                  <div style="margin-top: 6px; background: rgba(0,0,0,0.4); padding: 6px; border-radius: 4px; color: #f8fafc;"><b>Pesan:</b> "${msg.pesan}"</div>
                 </div>
               `;
             });
           }
         } else if (mainCmd === 'visitors' || mainCmd === 'logs') {
           logsContainer.innerHTML += `<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">admin@mountain-v1:~$</span> ${rawCmd}</div>`;
-          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Mengambil log perangkat pengunjung...</div>`;
+          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">Mengambil log perangkat & IP asli pengunjung...</div>`;
           
           const { data: visitors, error } = await supabaseClient
             .from('visitors')
             .select('*')
             .order('created_at', { ascending: false })
-            .limit(10);
+            .limit(15);
 
           if (error) {
-            responseText = `<span style="color: #ef4444;">Gagal mengambil log visitor (Pastikan tabel 'visitors' sudah dibuat): ${error.message}</span>`;
+            responseText = `<span style="color: #ef4444;">Gagal mengambil log visitor: ${error.message}</span>`;
           } else if (!visitors || visitors.length === 0) {
             responseText = `<div class="log-line" style="color: #94a3b8;">Belum ada log pengunjung yang terekam.</div>`;
           } else {
-            responseText = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- LOG PERANGKAT PENGUNJUNG WEB (${visitors.length}) ---</div>`;
+            responseText = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- LOG PERANGKAT & IP PENGUNJUNG (${visitors.length}) ---</div>`;
             visitors.forEach((v) => {
               const dateFormatted = new Date(v.created_at).toLocaleString('id-ID');
               responseText += `
                 <div class="msg-box">
-                  <div><span style="color: #facc15;">Waktu: ${dateFormatted}</span></div>
-                  <div style="color: #38bdf8; margin-top: 2px;"><b>Perangkat / Browser:</b> ${v.device_info}</div>
+                  <div><span style="color: #facc15;">Waktu: ${dateFormatted}</span> | <span style="color: #38bdf8;">IP: ${v.ip_address || 'Unknown'}</span></div>
+                  <div style="margin-top: 4px; color: #e2e8f0;"><b>Device:</b> ${v.device_info}</div>
                 </div>
               `;
             });
@@ -314,7 +314,7 @@
           const latency = Math.floor(Math.random() * 25) + 12;
           responseText = `<span class="log-tag-success">[PONG]</span> Latency to Supabase Edge Server: <b>${latency} ms</b>`;
         } else if (mainCmd === 'matrix') {
-          responseText = `<span style="color: #22c55e; font-family: monospace;">01010011 01111001 01110011 01110100 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00100000 01010011 01110100 01100001 01110100 01110101 01110011 00100000 01001111 01001011</span>`;
+          responseText = `<span style="color: #22c55e; font-family: monospace;">01010011 01111001 01110011 01110100 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00100000 01010011 01110101 01110010 01100101 00100000 01001111 01001011</span>`;
         } else if (mainCmd === 'history') {
           responseText = `<div><b>Riwayat Perintah:</b></div>`;
           cmdHistory.forEach((c, idx) => {
@@ -344,16 +344,51 @@
       }
     }
 
-    // Script Otomatis Catat Log Device Pengunjung Masuk ke Web (index.html atau halaman utama)
+    // Fungsi Pencatat Akurat Device & IP Address Pengunjung ke Supabase
     window.addEventListener('DOMContentLoaded', async () => {
       checkAdminStatus();
       
-      // Catat kunjungan perangkat visitor secara otomatis ke tabel 'visitors'
       try {
-        const deviceInfo = navigator.userAgent;
-        await supabaseClient.from('visitors').insert([{ device_info: deviceInfo }]);
+        // Ambil IP Address & Lokasi akurat via API publik gratis
+        let ipAddress = 'IP Tidak Diketahui';
+        try {
+          const ipRes = await fetch('https://ipapi.co/json/');
+          const ipData = await ipRes.json();
+          if (ipData && ipData.ip) {
+            ipAddress = `${ipData.ip} (${ipData.city || ''}, ${ipData.country_name || ''})`;
+          }
+        } catch (e) {
+          console.error("IP fetch failed", e);
+        }
+
+        // Deteksi jenis perangkat dengan akurat (Mobile / Tablet / PC)
+        const ua = navigator.userAgent;
+        let deviceType = "Desktop / PC";
+        if (/android/i.test(ua)) {
+          deviceType = "Android Mobile";
+        } else if (/iphone|ipad|ipod/i.test(ua)) {
+          deviceType = "iPhone / iOS Device";
+        } else if (/tablet|ipad/i.test(ua)) {
+          deviceType = "Tablet";
+        }
+
+        let browserName = "Browser Lain";
+        if (ua.indexOf("Firefox") > -1) browserName = "Mozilla Firefox";
+        else if (ua.indexOf("SamsungBrowser") > -1) browserName = "Samsung Internet";
+        else if (ua.indexOf("Opera") > -1 || ua.indexOf("OPR") > -1) browserName = "Opera";
+        else if (ua.indexOf("Trident") > -1) browserName = "Internet Explorer";
+        else if (ua.indexOf("Edge") > -1) browserName = "Microsoft Edge";
+        else if (ua.indexOf("Chrome") > -1) browserName = "Google Chrome";
+        else if (ua.indexOf("Safari") > -1) browserName = "Apple Safari";
+
+        const finalDeviceInfo = `${deviceType} - ${browserName}`;
+
+        // Simpan ke database Supabase tabel 'visitors'
+        await supabaseClient.from('visitors').insert([
+          { device_info: finalDeviceInfo, ip_address: ipAddress }
+        ]);
       } catch (err) {
-        console.error("Visitor tracking error:", err);
+        console.error("Accurate visitor tracking error:", err);
       }
     });
   </script>
