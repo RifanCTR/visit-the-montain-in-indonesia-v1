@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="color-scheme" content="dark">
   <title>Secure Core Terminal - Mountain OS</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { padding: 0; margin: 0; box-sizing: border-box; font-family: 'Consolas', 'Courier New', monospace; }
-    html, body { width: 100%; min-height: 100vh; background-color: #030712; color: #fff; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; }
+    html, body { width: 100%; min-height: 100vh; background-color: #030712; color: #f8fafc; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; }
     
-    .main-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; }
+    .main-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 16px; }
     
-    .login-container { width: 90%; max-width: 420px; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(56, 189, 248, 0.3); padding: 28px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); text-align: center; }
+    .login-container { width: 100%; max-width: 420px; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(56, 189, 248, 0.3); padding: 28px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); text-align: center; }
     .login-header-icon { font-size: 32px; color: #38bdf8; margin-bottom: 12px; }
+    h1 { font-size: 15px; margin-bottom: 8px; color: #fff; }
     
     .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 11.5px; font-weight: bold; margin-bottom: 16px; }
     .status-badge.active { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
@@ -28,8 +30,11 @@
     
     .btn-submit-login { width: 100%; padding: 12px; background: #38bdf8; color: #030712; border: none; font-weight: bold; font-size: 12.5px; border-radius: 8px; cursor: pointer; margin-top: 8px; font-family: 'Consolas', monospace; }
     .btn-submit-login:hover { background: #0ea5e9; }
+    .btn-submit-login:disabled { opacity: 0.6; cursor: wait; }
     
     .btn-logout { width: 100%; padding: 12px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); font-weight: bold; font-size: 12.5px; border-radius: 8px; cursor: pointer; margin-top: 8px; font-family: 'Consolas', monospace; }
+    .sub-desc { font-size: 11.5px; color: #94a3b8; margin-bottom: 14px; line-height: 1.5; }
+    
     .btn-back-home { display: inline-block; color: #64748b; font-size: 11px; text-decoration: none; margin-top: 16px; }
     .btn-back-home:hover { color: #38bdf8; }
 
@@ -51,347 +56,315 @@
     .terminal-input { flex: 1; background: none; border: none; color: #f8fafc; font-family: 'Consolas', monospace; font-size: 11.5px; outline: none; }
     
     #kaki { width: 100%; color: #475569; text-align: center; padding: 15px; font-size: 11px; border-top: 1px solid rgba(56, 189, 248, 0.1); }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
 
-  <div class="main-wrapper">
-    <div class="login-container">
+  <main class="main-wrapper">
+    <section class="login-container">
       <div class="login-header-icon"><i class="fa-solid fa-shield-halved"></i></div>
-      <h2 style="font-size: 15px; margin-bottom: 8px; color: #fff;">ROOT AUTHENTICATION</h2>
-      <div id="status-badge-box"></div>
+      <h1>ROOT AUTHENTICATION</h1>
+      <div id="status-badge-box" class="status-badge inactive"><i class="fa-solid fa-circle-xmark"></i> STATUS: UNAUTHORIZED</div>
 
-      <div id="login-form-area">
+      <!-- Form Login -->
+      <form id="login-form">
         <div class="login-form-group">
           <label for="input-username">UID_IDENTIFIER</label>
-          <input type="text" id="input-username" placeholder="Enter root user...">
+          <input type="text" id="input-username" autocomplete="username" required maxlength="64" placeholder="Enter root user...">
         </div>
         <div class="login-form-group">
           <label for="input-password">SEC_PASSPHRASE</label>
           <div class="password-input-wrapper">
-            <input type="password" id="input-password" placeholder="Enter security key...">
-            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()"><i class="fa-solid fa-eye" id="eye-icon"></i></button>
+            <input type="password" id="input-password" autocomplete="current-password" required maxlength="1024" placeholder="Enter security key...">
+            <button type="button" class="toggle-password-btn" id="toggle-password" aria-label="Show password"><i class="fa-solid fa-eye" id="eye-icon"></i></button>
           </div>
         </div>
-        <button type="button" class="btn-submit-login" onclick="processAdminLogin()">EXECUTE LOGIN</button>
-      </div>
+        <button type="submit" class="btn-submit-login" id="login-button">EXECUTE LOGIN</button>
+      </form>
 
-      <div id="logged-in-area" style="display: none;">
-        <p style="font-size: 11.5px; color: #94a3b8; margin-bottom: 14px; line-height: 1.5;">Root privileges granted. Full database terminal unlocked.</p>
+      <!-- Panel Jika Sudah Login -->
+      <div id="logged-in-area" hidden>
+        <p class="sub-desc">Root privileges granted via secure token. Full database terminal unlocked.</p>
         <button type="button" class="btn-submit-login" style="margin-bottom: 8px;" onclick="goToAdminPanel()">OPEN WEB CONSOLE</button>
-        <button type="button" class="btn-logout" onclick="processAdminLogout()"><i class="fa-solid fa-power-off"></i> TERMINATE SESSION</button>
+        <button type="button" class="btn-logout" id="logout-btn"><i class="fa-solid fa-power-off"></i> TERMINATE SESSION</button>
       </div>
-      <a href="index.html" class="btn-back-home">&lt;&lt; Return to Public Root</a>
-    </div>
 
-    <div class="terminal-container" id="admin-terminal" style="display: none;">
+      <a href="index.html" class="btn-back-home">&lt;&lt; Return to Public Root</a>
+    </section>
+
+    <!-- Terminal Admin -->
+    <section class="terminal-container" id="admin-terminal" hidden>
       <div class="terminal-header">
-        <div class="terminal-title"><i class="fa-solid fa-terminal" style="color: #38bdf8;"></i> root@mountain-core:~# (Secure Shell)</div>
+        <div class="terminal-title"><i class="fa-solid fa-terminal" style="color: #38bdf8;"></i> root@mountain-core:~# (Secure API Shell)</div>
         <div class="terminal-controls"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
       </div>
       <div class="terminal-body" id="terminal-logs"></div>
-      <div class="terminal-input-line">
+      <form class="terminal-input-line" id="command-form">
         <span class="terminal-prompt">root@mountain-core:~#</span>
-        <input type="text" class="terminal-input" id="terminal-cmd" placeholder="Type 'help' for command manual..." onkeydown="handleTerminalCommand(event)">
-      </div>
-    </div>
-  </div>
+        <input type="text" class="terminal-input" id="terminal-cmd" autocomplete="off" spellcheck="false" placeholder="Type 'help' for command manual..." maxlength="300">
+      </form>
+    </section>
+  </main>
 
   <footer id="kaki">&copy; 2026 Mountain Core Systems. Restricted Access Only.</footer>
 
   <script>
-    const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_icluCCVkHxsP8K2RfjE_4A_tCTX0B-F';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    (() => {
+      'use strict';
+      const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_icluCCVkHxsP8K2RfjE_4A_tCTX0B-F';
+      
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      });
 
-    let cmdHistory = [];
-    let historyIndex = -1;
+      let cmdHistory = [];
+      let historyIndex = -1;
 
-    function checkAdminStatus() {
-      const isAdmin = localStorage.getItem('is_admin') === 'true';
-      const statusBadgeBox = document.getElementById('status-badge-box');
-      const loginFormArea = document.getElementById('login-form-area');
-      const loggedInArea = document.getElementById('logged-in-area');
-      const adminTerminal = document.getElementById('admin-terminal');
+      const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const log = (html) => { 
+        const el = document.createElement('div'); 
+        el.className = 'log-line'; 
+        el.innerHTML = html; 
+        document.getElementById('terminal-logs').appendChild(el); 
+        document.getElementById('terminal-logs').scrollTop = document.getElementById('terminal-logs').scrollHeight; 
+      };
 
-      if (isAdmin) {
-        statusBadgeBox.innerHTML = `<div class="status-badge active"><i class="fa-solid fa-circle-check"></i> STATUS: ROOT_ONLINE</div>`;
-        loginFormArea.style.display = 'none';
-        loggedInArea.style.display = 'block';
-        adminTerminal.style.display = 'block';
-        initTerminalLogs();
-      } else {
-        statusBadgeBox.innerHTML = `<div class="status-badge inactive"><i class="fa-solid fa-circle-xmark"></i> STATUS: UNAUTHORIZED</div>`;
-        loginFormArea.style.display = 'block';
-        loggedInArea.style.display = 'none';
-        adminTerminal.style.display = 'none';
-      }
-    }
-
-    function togglePasswordVisibility() {
-      const passInput = document.getElementById('input-password');
-      const eyeIcon = document.getElementById('eye-icon');
-      if (passInput.type === 'password') {
-        passInput.type = 'text';
-        eyeIcon.className = 'fa-solid fa-eye-slash';
-      } else {
-        passInput.type = 'password';
-        eyeIcon.className = 'fa-solid fa-eye';
-      }
-    }
-
-    // Fungsi login yang mengecek langsung ke database Supabase tabel 'admins'
-    async function processAdminLogin() {
-      const user = document.getElementById('input-username').value.trim();
-      const pass = document.getElementById('input-password').value.trim();
-
-      if (!user || !pass) {
-        alert('[SEC_WARN]: Username and password cannot be empty.');
-        return;
+      async function getSession() {
+        const { data, error } = await client.auth.getSession();
+        if (error) throw error;
+        return data.session;
       }
 
-      try {
-        // Query ke database tabel admins
-        const { data, error } = await supabaseClient
-          .from('admins')
-          .select('*')
-          .eq('username', user)
-          .eq('password', pass)
-          .single();
-
-        if (error || !data) {
-          alert('[SEC_WARN]: Access denied. Invalid credentials.');
-        } else {
-          localStorage.setItem('is_admin', 'true');
-          alert('[SYSTEM_AUTH]: Root verification successful. Welcome, ' + data.username + '!');
-          checkAdminStatus();
+      async function refreshUI() {
+        try {
+          const session = await getSession();
+          const isSignedIn = !!session;
+          
+          document.getElementById('login-form').hidden = isSignedIn;
+          document.getElementById('logged-in-area').hidden = !isSignedIn;
+          document.getElementById('admin-terminal').hidden = true;
+          
+          const badge = document.getElementById('status-badge-box');
+          if (isSignedIn) {
+            badge.className = 'status-badge active';
+            badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> STATUS: ROOT_ONLINE`;
+          } else {
+            badge.className = 'status-badge inactive';
+            badge.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> STATUS: UNAUTHORIZED`;
+          }
+        } catch (err) {
+          console.error("Session check error:", err);
         }
-      } catch (err) {
-        console.error("Auth error:", err);
-        alert('[ERR_SYS]: Authentication database connection failed.');
       }
-    }
 
-    function processAdminLogout() {
-      if (confirm('Confirm session termination?')) {
-        localStorage.setItem('is_admin', 'false');
-        alert('[SYSTEM]: Session closed safely.');
-        checkAdminStatus();
+      async function callAdminAPI(action, body = {}) {
+        const session = await getSession();
+        if (!session?.access_token) throw new Error('Session expired. Please sign in again.');
+        
+        const response = await fetch('/api/admin/' + encodeURIComponent(action), {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + session.access_token 
+          },
+          body: JSON.stringify(body)
+        });
+        
+        const payload = await response.json().catch(() => ({ error: 'Invalid server response' }));
+        if (!response.ok) throw new Error(payload.error || 'Request failed (' + response.status + ')');
+        return payload;
       }
-    }
 
-    function goToAdminPanel() { window.location.replace('index.html#contact'); }
+      // Toggle Password Visibility
+      document.getElementById('toggle-password').addEventListener('click', () => {
+        const p = document.getElementById('input-password');
+        const eye = document.getElementById('eye-icon');
+        const show = p.type === 'password';
+        p.type = show ? 'text' : 'password';
+        eye.className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+      });
 
-    function escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-    }
-
-    async function initTerminalLogs() {
-      const logsContainer = document.getElementById('terminal-logs');
-      logsContainer.innerHTML = `
-        <div class="log-line"><span class="log-time">[00:00:01] [KERNEL]</span> Initializing Secure Shell v3.8...</div>
-        <div class="log-line"><span class="log-time">[00:00:02] [NET_CORE]</span> Connecting to Supabase PostgreSQL... [OK]</div>
-        <div class="log-line"><span class="log-tag-success">[SEC_OK]</span> Root user session authenticated [CipherNode].</div>
-        <div class="log-line" style="color: #94a3b8; border-bottom: 1px dashed rgba(56,189,248,0.2); padding-bottom: 6px; margin-top: 6px;">Type 'help' to display command manual.</div>
-      `;
-      logsContainer.scrollTop = 0;
-    }
-
-    async function handleTerminalCommand(e) {
-      const input = document.getElementById('terminal-cmd');
-      const logsContainer = document.getElementById('terminal-logs');
-
-      if (e.key === 'ArrowUp') {
-        if (cmdHistory.length > 0 && historyIndex < cmdHistory.length - 1) {
-          historyIndex++;
-          input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
-        }
+      // Proses Login via API Backend Vercel
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        return;
-      } else if (e.key === 'ArrowDown') {
-        if (historyIndex > 0) {
-          historyIndex--;
-          input.value = cmdHistory[cmdHistory.length - 1 - historyIndex];
-        } else if (historyIndex === 0) {
-          historyIndex = -1;
-          input.value = '';
+        const btn = document.getElementById('login-button');
+        btn.disabled = true;
+
+        try {
+          const response = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username: document.getElementById('input-username').value.trim(),
+              password: document.getElementById('input-password').value
+            })
+          });
+
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok || !result.session) throw new Error(result.error || 'Invalid credentials');
+
+          const { error } = await client.auth.setSession({
+            access_token: result.session.access_token,
+            refresh_token: result.session.refresh_token
+          });
+          if (error) throw error;
+
+          await callAdminAPI('check');
+          await refreshUI();
+          document.getElementById('input-password').value = '';
+          alert('[SYSTEM_AUTH]: Root verification successful.');
+        } catch (err) {
+          await client.auth.signOut();
+          alert('[SEC_WARN]: Access denied. ' + err.message);
+          refreshUI();
+        } finally {
+          btn.disabled = false;
         }
+      });
+
+      document.getElementById('open-console').addEventListener('click', async () => {
+        try {
+          await callAdminAPI('check');
+          document.getElementById('admin-terminal').hidden = false;
+          document.getElementById('terminal-logs').innerHTML = `
+            <div class="log-line"><span class="log-time">[00:00:01] [KERNEL]</span> Initializing Secure Shell v3.8...</div>
+            <div class="log-line"><span class="log-time">[00:00:02] [NET_CORE]</span> Connected to Serverless API & PostgreSQL cluster [OK]</div>
+            <div class="log-line"><span class="log-tag-success">[SEC_OK]</span> Root user session authorized.</div>
+            <div class="log-line" style="color: #94a3b8; border-bottom: 1px dashed rgba(56,189,248,0.2); padding-bottom: 6px; margin-top: 6px;">Type 'help' to display command manual.</div>
+          `;
+          document.getElementById('terminal-cmd').focus();
+        } catch (err) {
+          log('<span style="color: #ef4444;">[DENIED] ' + esc(err.message) + '</span>');
+        }
+      });
+
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        if (confirm('Confirm session termination?')) {
+          await client.auth.signOut();
+          document.getElementById('admin-terminal').hidden = true;
+          document.getElementById('terminal-logs').innerHTML = '';
+          await refreshUI();
+          alert('[SYSTEM]: Session closed safely.');
+        }
+      });
+
+      window.goToAdminPanel = () => { window.location.replace('index.html#contact'); };
+
+      // Perintah Terminal
+      document.getElementById('command-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        return;
-      }
+        const input = document.getElementById('terminal-cmd');
+        const raw = input.value.trim();
+        input.value = '';
+        if (!raw) return;
 
-      if (e.key === 'Enter') {
-        const rawCmd = input.value.trim();
-        if (!rawCmd) return;
-
-        cmdHistory.push(rawCmd);
+        cmdHistory.push(raw);
         historyIndex = -1;
 
-        const cmdParts = rawCmd.split(' ');
-        const mainCmd = cmdParts[0].toLowerCase();
-        const param = cmdParts[1];
+        log('<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">root@mountain-core:~#</span> ' + esc(raw) + '</div>');
 
-        let responseText = '';
+        const parts = raw.split(/\s+/);
+        const cmd = parts[0].toLowerCase();
+        const arg = parts[1];
 
-        if (mainCmd === 'help' || mainCmd === 'info') {
-          responseText = `
-            <div style="color: #38bdf8; font-weight: bold; margin-bottom: 4px;">AVAILABLE SYSTEM COMMANDS:</div>
-            <div>- <b>messages</b> (or <b>inbox</b>) : Fetch & parse ALL encrypted message records</div>
-            <div>- <b>visitors</b> (or <b>logs</b>)   : Query visitor telemetry & client fingerprint</div>
-            <div>- <b>delmsg &lt;id&gt;</b>           : Purge specific message record by ID</div>
-            <div>- <b>sysinfo</b>               : Print kernel runtime environment</div>
-            <div>- <b>status</b>                : Perform real-time cluster health check</div>
-            <div>- <b>ping</b>                  : Measure socket round-trip latency</div>
-            <div>- <b>matrix</b>                : Dump binary memory stream buffer</div>
-            <div>- <b>history</b>               : Output command execution history</div>
-            <div>- <b>clear</b>                 : Clear terminal output screen</div>
-            <div>- <b>logout</b>                : Terminate active root session</div>
-          `;
-        } else if (mainCmd === 'messages' || mainCmd === 'inbox') {
-          logsContainer.innerHTML += `<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">root@mountain-core:~#</span> ${rawCmd}</div>`;
-          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">[EXEC] Querying PostgreSQL 'messages'...</div>`;
-          
-          const { data: messages, error } = await supabaseClient
-            .from('messages')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-          if (error) {
-            responseText = `<span style="color: #ef4444;">[ERR_DB]: ${escapeHtml(error.message)}</span>`;
-          } else if (!messages || messages.length === 0) {
-            responseText = `<div class="log-line" style="color: #94a3b8;">[INFO] Table 'messages' is empty.</div>`;
-          } else {
-            responseText = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- ALL SECURE MESSAGES (${messages.length}) ---</div>`;
-            messages.forEach((msg) => {
-              const dateFormatted = new Date(msg.created_at).toLocaleString('id-ID');
-              responseText += `
-                <div class="msg-box">
-                  <div><span style="color: #facc15; font-weight: bold;">ID: #${escapeHtml(String(msg.id))}</span> | <span style="color: #94a3b8;">${dateFormatted}</span></div>
-                  <div style="margin-top: 4px;"><b>Sender:</b> ${escapeHtml(msg.nama)} (<span style="color: #38bdf8;">${escapeHtml(msg.email)}</span>)</div>
-                  <div style="margin-top: 6px; background: rgba(0,0,0,0.5); padding: 6px; border-radius: 4px; color: #f8fafc;"><b>Payload:</b> "${escapeHtml(msg.pesan)}"</div>
-                </div>
-              `;
-            });
-          }
-        } else if (mainCmd === 'visitors' || mainCmd === 'logs') {
-          logsContainer.innerHTML += `<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">root@mountain-core:~#</span> ${rawCmd}</div>`;
-          logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">[EXEC] Extracting client telemetry...</div>`;
-          
-          const { data: visitors, error } = await supabaseClient
-            .from('visitors')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(20);
-
-          if (error) {
-            responseText = `<span style="color: #ef4444;">[ERR_DB]: ${escapeHtml(error.message)}</span>`;
-          } else if (!visitors || visitors.length === 0) {
-            responseText = `<div class="log-line" style="color: #94a3b8;">[INFO] No visitor logs recorded.</div>`;
-          } else {
-            responseText = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- VISITOR TELEMETRY (${visitors.length}) ---</div>`;
-            visitors.forEach((v) => {
-              const dateFormatted = new Date(v.created_at).toLocaleString('id-ID');
-              responseText += `
-                <div class="msg-box">
-                  <div><span style="color: #facc15;">TIME: ${dateFormatted}</span> | <span style="color: #38bdf8;">IP: ${escapeHtml(v.ip_address || 'N/A')}</span></div>
-                  <div style="margin-top: 4px; color: #e2e8f0;"><b>Fingerprint:</b> ${escapeHtml(v.device_info)}</div>
-                </div>
-              `;
-            });
-          }
-        } else if (mainCmd === 'delmsg') {
-          if (!param) {
-            responseText = `<span style="color: #ef4444;">[SYNTAX_ERR] Usage: <b>delmsg &lt;id&gt;</b></span>`;
-          } else {
-            logsContainer.innerHTML += `<div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">root@mountain-core:~#</span> ${rawCmd}</div>`;
-            logsContainer.innerHTML += `<div class="log-line" style="color: #facc15;">[EXEC] Purging record ID #${escapeHtml(param)}...</div>`;
-
-            const { error } = await supabaseClient
-              .from('messages')
-              .delete()
-              .eq('id', param);
-
-            if (error) {
-              responseText = `<span style="color: #ef4444;">[ERR_PURGE]: ${escapeHtml(error.message)}</span>`;
-            } else {
-              responseText = `<span class="log-tag-success">[SUCCESS]</span> Record ID <b>#${escapeHtml(param)}</b> permanently wiped.`;
-            }
-          }
-        } else if (mainCmd === 'sysinfo') {
-          responseText = `
-            <div><b>SYSTEM KERNEL SPECIFICATION:</b></div>
-            <div>- OS Kernel: Mountain-SecureOS v3.8-Hardened</div>
-            <div>- Edge Network: Vercel Serverless Proxy</div>
-            <div>- Database: Supabase PostgreSQL Cloud</div>
-            <div>- Active Session: CipherNode [ROOT]</div>
-          `;
-        } else if (mainCmd === 'status') {
-          responseText = `<span class="log-tag-success">[STATUS_OK]</span> Database cluster connection is stable.`;
-        } else if (mainCmd === 'ping') {
-          const latency = Math.floor(Math.random() * 20) + 10;
-          responseText = `<span class="log-tag-success">[PONG]</span> Latency to Edge node: <b>${latency} ms</b>`;
-        } else if (mainCmd === 'matrix') {
-          responseText = `<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100111 01110101 01110010 01100101 00101100 00100000 01001111 01001011</span>`;
-        } else if (mainCmd === 'history') {
-          responseText = `<div><b>COMMAND HISTORY:</b></div>`;
-          cmdHistory.forEach((c, idx) => {
-            responseText += `<div>[${idx + 1}] ${escapeHtml(c)}</div>`;
-          });
-        } else if (mainCmd === 'clear') {
-          logsContainer.innerHTML = '';
-          input.value = '';
-          return;
-        } else if (mainCmd === 'logout') {
-          processAdminLogout();
-          input.value = '';
-          return;
-        } else {
-          responseText = `<span style="color: #ef4444;">[ERR_CMD]: '${escapeHtml(rawCmd)}' not found. Type 'help'.</span>`;
-        }
-
-        if (mainCmd !== 'messages' && mainCmd !== 'inbox' && mainCmd !== 'visitors' && mainCmd !== 'logs' && mainCmd !== 'delmsg') {
-          logsContainer.innerHTML += `
-            <div class="log-line" style="margin-top: 8px;"><span class="terminal-prompt">root@mountain-core:~#</span> ${escapeHtml(rawCmd)}</div>
-          `;
-        }
-        
-        logsContainer.innerHTML += `<div class="log-line">${responseText}</div>`;
-        input.value = '';
-        logsContainer.scrollTop = logsContainer.scrollHeight;
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', async () => {
-      checkAdminStatus();
-      
-      try {
-        let ipAddress = 'UNKNOWN_IP';
         try {
-          const ipRes = await fetch('https://ipapi.co/json/');
-          const ipData = await ipRes.json();
-          if (ipData && ipData.ip) {
-            ipAddress = `${ipData.ip} (${ipData.city || 'Unknown'}, ${ipData.country_name || 'Unknown'})`;
+          if (cmd === 'help' || cmd === 'info') {
+            log(`
+              <div style="color: #38bdf8; font-weight: bold; margin-bottom: 4px;">AVAILABLE SYSTEM COMMANDS:</div>
+              <div>- <b>messages</b> (or <b>inbox</b>) : Fetch encrypted message records securely via API</div>
+              <div>- <b>visitors</b> (or <b>logs</b>)   : Query visitor telemetry stream</div>
+              <div>- <b>delmsg &lt;id&gt;</b>           : Purge specific message record by ID</div>
+              <div>- <b>sysinfo</b>               : Print kernel runtime environment</div>
+              <div>- <b>status</b>                : Perform real-time cluster health check</div>
+              <div>- <b>ping</b>                  : Measure socket round-trip latency</div>
+              <div>- <b>matrix</b>                : Dump binary memory stream buffer</div>
+              <div>- <b>history</b>               : Output command execution history</div>
+              <div>- <b>clear</b>                 : Clear terminal output screen</div>
+              <div>- <b>logout</b>                : Terminate active root session</div>
+            `);
+          } else if (cmd === 'clear') {
+            document.getElementById('terminal-logs').innerHTML = '';
+          } else if (cmd === 'logout') {
+            document.getElementById('logout-btn').click();
+          } else if (cmd === 'status') {
+            await callAdminAPI('check');
+            log('<span class="log-tag-success">[STATUS_OK]</span> Server-side authorization verified successfully.');
+          } else if (cmd === 'sysinfo') {
+            log(`
+              <div><b>SYSTEM KERNEL SPECIFICATION:</b></div>
+              <div>- OS Kernel: Mountain-SecureOS v3.8-Hardened</div>
+              <div>- Edge Network: Vercel Serverless Function Proxy</div>
+              <div>- Database: Supabase PostgreSQL Cloud Cluster</div>
+              <div>- Auth Engine: Supabase Auth + Token Verification</div>
+            `);
+          } else if (cmd === 'ping') {
+            const latency = Math.floor(Math.random() * 15) + 8;
+            log('<span class="log-tag-success">[PONG]</span> Round-trip latency to Edge node: <b>' + latency + ' ms</b>');
+          } else if (cmd === 'matrix') {
+            log('<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00100000 01001111 01001011</span>');
+          } else if (cmd === 'history') {
+            let histHtml = '<div><b>COMMAND HISTORY:</b></div>';
+            cmdHistory.forEach((c, idx) => { histHtml += `<div>[${idx + 1}] ${esc(c)}</div>`; });
+            log(histHtml);
+          } else if (cmd === 'messages' || cmd === 'inbox') {
+            log('<span style="color: #facc15;">[EXEC] Fetching messages via secure server API...</span>');
+            const res = await callAdminAPI('messages');
+            if (!res.data || res.data.length === 0) {
+              log('<span style="color: #94a3b8;">[INFO] Database table "messages" is empty.</span>');
+            } else {
+              let msgHtml = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- ALL SECURE MESSAGES (${res.data.length}) ---</div>`;
+              res.data.forEach(m => {
+                const dateFormatted = new Date(m.created_at).toLocaleString('id-ID');
+                msgHtml += `
+                  <div class="msg-box">
+                    <div><span style="color: #facc15; font-weight: bold;">ID: #${esc(m.id)}</span> | <span style="color: #94a3b8;">${esc(dateFormatted)}</span></div>
+                    <div style="margin-top: 4px;"><b>Sender:</b> ${esc(m.nama)} (<span style="color: #38bdf8;">${esc(m.email)}</span>)</div>
+                    <div style="margin-top: 6px; background: rgba(0,0,0,0.5); padding: 6px; border-radius: 4px; color: #f8fafc;"><b>Payload:</b> "${esc(m.pesan)}"</div>
+                  </div>
+                `;
+              });
+              log(msgHtml);
+            }
+          } else if (cmd === 'visitors' || cmd === 'logs') {
+            log('<span style="color: #facc15;">[EXEC] Querying visitor telemetry via secure server API...</span>');
+            const res = await callAdminAPI('visitors');
+            if (!res.data || res.data.length === 0) {
+              log('<span style="color: #94a3b8;">[INFO] No visitor telemetry recorded.</span>');
+            } else {
+              let visHtml = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- VISITOR TELEMETRY (${res.data.length}) ---</div>`;
+              res.data.forEach(v => {
+                const dateFormatted = new Date(v.created_at).toLocaleString('id-ID');
+                visHtml += `
+                  <div class="msg-box">
+                    <div><span style="color: #facc15;">TIME: ${esc(dateFormatted)}</span> | <span style="color: #38bdf8;">IP: ${esc(v.ip_address || 'N/A')}</span></div>
+                    <div style="margin-top: 4px; color: #e2e8f0;"><b>Fingerprint:</b> ${esc(v.device_info)}</div>
+                  </div>
+                `;
+              });
+              log(visHtml);
+            }
+          } else if (cmd === 'delmsg') {
+            if (!arg) throw new Error('Usage: delmsg <id>');
+            if (!confirm('Purge record ID #' + arg + ' from database?')) return;
+            log('<span style="color: #facc15;">[EXEC] Purging message ID #' + esc(arg) + '...</span>');
+            await callAdminAPI('delmsg', { id: arg });
+            log('<span class="log-tag-success">[SUCCESS]</span> Record ID <b>#' + esc(arg) + '</b> permanently wiped.');
+          } else {
+            log('<span style="color: #ef4444;">[ERR_CMD]: \'' + esc(raw) + '\' not found. Type "help".</span>');
           }
-        } catch (e) {}
+        } catch (err) {
+          log('<span style="color: #ef4444;">[ERROR] ' + esc(err.message) + '</span>');
+        }
+      });
 
-        const ua = navigator.userAgent;
-        let deviceType = "Desktop Workstation";
-        if (/android/i.test(ua)) deviceType = "Mobile Android Device";
-        else if (/iphone|ipad|ipod/i.test(ua)) deviceType = "Apple iOS Device";
+      client.auth.onAuthStateChange(() => {
+        setTimeout(() => refreshUI().catch(() => {}), 0);
+      });
 
-        let browserName = "Unknown Browser";
-        if (ua.indexOf("Firefox") > -1) browserName = "Mozilla Firefox";
-        else if (ua.indexOf("Edge") > -1) browserName = "Microsoft Edge";
-        else if (ua.indexOf("Chrome") > -1) browserName = "Google Chrome";
-        else if (ua.indexOf("Safari") > -1) browserName, ua = "Apple Safari";
-
-        const finalFingerprint = `${deviceType} // ${browserName}`;
-
-        await supabaseClient.from('visitors').insert([
-          { device_info: finalFingerprint, ip_address: ipAddress }
-        ]);
-      } catch (err) {}
-    });
+      refreshUI().catch(() => {});
+    })();
   </script>
 </body>
 </html>
