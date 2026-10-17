@@ -1,14 +1,3 @@
-<!-- 
-  ===================================================================
-  WEY, KEPENGEN TAHU BANGET YA? 💀
-  Ngapain lu scroll sampe atas gini, bro? Dibilangin gak ada apa-apa 
-  juga. 
-  Kalo lu nyari celah, lu telat. Mending ngerjakeun tugas lain atau 
-  scroll TikTok aja deh daripada pusing liat codingan orang. 
-  By the way, ily udah mampir ke portofolio ini. 
-  ===================================================================
--->
-
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="id">
@@ -446,16 +435,46 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+
 console.log(
   "%cANJIR, KEPINGIN JADI HACKER LO?\n" +
-  "%cUdah lah bro, gak usah capek-capek nyari token, username, password atau API key di sini. " +
-  "Semuanya udah aman di backend, gak bakal ketemu walau lu scroll sampe subuh. 💀\n" +
-  "Mending tutup console-nya, balik nongkrong, atau nikmatin web-nya. " +
-  "Lu keren kok, tapi gak usah nyari validasi dari inspect element ya, wkwk!",
+  "%cUdah lah bro, gak usah capek-capek nyari celah di sini, aman! \n" +
+  "Btw, karena lu udah capek-capek buka console, gua ada HADIAH SPESIAL buat lu.\n" +
+  "Ketik %chadiah()% di bawah terus ENTER ",
   "color: #ff3366; font-size: 15px; font-weight: bold; background: #161616; padding: 12px; border-radius: 8px; border: 1px dashed #ff3366;",
-  "color: #38bdf8; font-size: 13px; font-weight: normal;"
+  "color: #38bdf8; font-size: 13px; font-weight: normal;",
+  "color: #22c55e; font-size: 14px; font-weight: bold; background: #222; padding: 2px 6px; border-radius: 4px;"
 );
 
+window.hadiah = function() {
+  console.log("%cWKWKWK RASAIN TUH SPAMNYA! 😭🫵", "color: #ef4444; font-size: 20px; font-weight: bold;");
+  
+  let pesanSpam = [
+    "🎁 SELAMAT! Anda terpilih jadi pemenang undian angin surga!",
+    "⚠️ PERINGATAN: Jangan jadi orang kepo, nanti cepat tua!",
+    "💻 Kodingan orang lain diliatin, kodingan sendiri terbengkalai wkwk",
+    "☕ Sini ngopi dulu, bree, jangan pusingin web orang mulu!",
+    "💀 Hati-hati, laptop lu bakal meledak 5 detik lagi (ga boong)",
+    "🎉 Nih hadiah terakhir: Tutup console-nya sekarang juga! 😂"
+  ];
+
+  let jumlahPopUp = 0;
+  let intervalSpam = setInterval(() => {
+    if (jumlahPopUp >= 6) {
+      clearInterval(intervalSpam);
+      return;
+    }
+
+    let teksAcak = pesanSpam[jumlahPopUp];
+    window.open("about:blank", "_blank", "width=400,height=200").document.write(`
+      <body style="background:#111; color:#fff; font-family:sans-serif; display:flex; justify-content:center; align-items:center; text-align:center; padding:20px;">
+        <h3 style="color:#ff3366;">${teksAcak}</h3>
+      </body>
+    `);
+
+    jumlahPopUp++;
+  }, 400);
+};
     AOS.init();
 
     const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
