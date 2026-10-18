@@ -6,7 +6,6 @@
   <meta name="color-scheme" content="dark">
   <title>Secure Core Terminal - Mountain OS</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { padding: 0; margin: 0; box-sizing: border-box; font-family: 'Consolas', 'Courier New', monospace; }
     html, body { width: 100%; min-height: 100vh; background-color: #030712; color: #f8fafc; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px 0; }
@@ -94,10 +93,6 @@
   <script>
     (() => {
       'use strict';
-      const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
-      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_icluCCVkHxsP8K2RfjE_4A_tCTX0B-F';
-      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
       let cmdHistory = [];
       let isExecuting = false;
 
@@ -113,7 +108,7 @@
         return el;
       };
 
-      async function streamGitLogs(steps, speed = 180) {
+      async function streamGitLogs(steps, speed = 150) {
         for (let step of steps) {
           log(step);
           await delay(speed);
@@ -123,7 +118,7 @@
       function refreshUI() {
         const isAuth = localStorage.getItem('is_admin') === 'true';
         document.getElementById('login-form').hidden = isAuth;
-        document.getElementById('logged-in-area').hidden = !isAuth;
+        document.getElementById('logged-in-area').hidden = isAuth ? false : true;
         document.getElementById('admin-terminal').hidden = true;
         
         const badge = document.getElementById('status-badge-box');
@@ -253,8 +248,6 @@
               <div>- <b>sysinfo</b>               : Print kernel runtime environment</div>
               <div>- <b>status</b>                : Perform real-time cluster health check</div>
               <div>- <b>ping</b>                  : Measure socket round-trip latency</div>
-              <div>- <b>matrix</b>                : Dump binary memory stream buffer</div>
-              <div>- <b>history</b>               : Output command execution history</div>
               <div>- <b>clear</b>                 : Clear terminal output screen</div>
               <div>- <b>logout</b>                : Terminate active root session</div>
             `);
@@ -278,13 +271,6 @@
             await streamGitLogs(['[PINGING EDGE NODE...]'], 100);
             const latency = Math.floor(Math.random() * 15) + 8;
             log('<span class="log-tag-success">[PONG]</span> Round-trip latency to Edge node: <b>' + latency + ' ms</b>');
-          } else if (cmd === 'matrix') {
-            await streamGitLogs(['[DUMPING MEMORY BUFFER...]'], 100);
-            log('<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00101100 00100000 01001111 01001011</span>');
-          } else if (cmd === 'history') {
-            let histHtml = '<div><b>COMMAND HISTORY:</b></div>';
-            cmdHistory.forEach((c, idx) => { histHtml += `<div>[${idx + 1}] ${esc(c)}</div>`; });
-            log(histHtml);
           } else if (cmd === 'messages' || cmd === 'inbox') {
             await streamGitLogs([
               'Enumerating messages: 100%, done.',
@@ -322,7 +308,7 @@
               let visHtml = `<div style="color: #4ade80; font-weight: bold; margin-bottom: 6px;">--- VISITOR TELEMETRY (${res.data.length}) ---</div>`;
               res.data.forEach(v => {
                 const dateFormatted = new Date(v.created_at).toLocaleString('id-ID');
-                visHtml += `
+                msgHtml += `
                   <div class="msg-box">
                     <div><span style="color: #facc15;">TIME: ${esc(dateFormatted)}</span> | <span style="color: #38bdf8;">IP: ${esc(v.ip_address || 'N/A')}</span></div>
                     <div style="margin-top: 4px; color: #e2e8f0;"><b>Fingerprint:</b> ${esc(v.device_info)}</div>
