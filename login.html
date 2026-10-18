@@ -35,15 +35,11 @@
     .dot.red { background: #ef4444; } .dot.yellow { background: #f59e0b; } .dot.green { background: #10b981; }
     .terminal-body { padding: 14px; height: 340px; overflow-y: auto; font-size: 11.5px; line-height: 1.6; color: #38bdf8; }
     .log-line { margin-bottom: 4px; word-break: break-all; }
-    .log-time { color: #475569; }
     .log-tag-success { color: #4ade80; font-weight: bold; }
     .msg-box { border: 1px solid rgba(56, 189, 248, 0.2); background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 6px; margin: 8px 0; color: #e2e8f0; }
     .terminal-input-line { display: flex; align-items: center; background: #020617; padding: 8px 14px; border-top: 1px solid rgba(56, 189, 248, 0.2); }
     .terminal-prompt { color: #4ade80; font-size: 11.5px; margin-right: 8px; font-weight: bold; }
     .terminal-input { flex: 1; background: none; border: none; color: #f8fafc; font-family: 'Consolas', monospace; font-size: 11.5px; outline: none; }
-    .termux-loading { color: #facc15; font-style: italic; }
-    .termux-loading::after { content: '...'; animation: dots 1s infinite steps(4, jump-none); }
-    @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
     #kaki { width: 100%; color: #475569; text-align: center; padding: 15px; font-size: 11px; border-top: 1px solid rgba(56, 189, 248, 0.1); }
     [hidden] { display: none !important; }
   </style>
@@ -113,13 +109,13 @@
         el.className = 'log-line'; 
         el.innerHTML = html; 
         document.getElementById('terminal-logs').appendChild(el); 
-        document.getElementById('terminal-logs').scrollTop = document.getElementById('terminal-logs').scrollHeight;
+        document.getElementById('terminal-logs').scrollTop = document.getElementById('terminal-logs').scrollHeight; 
         return el;
       };
 
-      async function termuxStreamLog(steps, speed = 250) {
+      async function streamGitLogs(steps, speed = 180) {
         for (let step of steps) {
-          log('<span class="termux-loading" style="color: #facc15;">' + step + '</span>');
+          log(step);
           await delay(speed);
         }
       }
@@ -196,12 +192,19 @@
           document.getElementById('admin-terminal').hidden = false;
           document.getElementById('terminal-logs').innerHTML = '';
           
-          await termuxStreamLog([
-            '[KERNEL] Mounting virtual filesystem (/dev/pts/0)...',
-            '[NET_CORE] Resolving serverless proxy gateway...',
-            '[AUTHENTICATING] Handshaking secure tokens with Supabase Postgres...',
-            '[SEC_OK] Session key validated successfully.'
-          ], 200);
+          log('<span style="color: #94a3b8;">PS C:\\Users\\mountain\\project> git push origin main</span>');
+          await streamGitLogs([
+            'Enumerating objects: 12, done.',
+            'Counting objects: 100% (12/12), done.',
+            'Delta compression using up to 8 threads',
+            'Compressing objects: 100% (6/6), done.',
+            'Writing objects: 100% (6/6), 1.24 KiB | 1.24 MiB/s, done.',
+            'Total 6 (delta 3), reused 0 (delta 0), pack-reused 0',
+            'remote: Resolving deltas: 100% (3/3), completed.',
+            '<span class="log-tag-success">To https://github.com/RifanCTR/visit-the-montain-in-indonesia-v1.git</span>',
+            '<span style="color: #facc15;">   fc81032..0414589  main -> main</span>',
+            '<span class="log-tag-success">[SEC_OK] Secure Shell connected & session token verified successfully.</span>'
+          ], 150);
 
           log('<div class="log-line" style="color: #94a3b8; border-bottom: 1px dashed rgba(56,189,248,0.2); padding-bottom: 6px; margin-top: 6px;">Type <b>\'help\'</b> to display command manual.</div>');
           document.getElementById('admin-terminal').scrollIntoView({ behavior: 'smooth' });
@@ -241,12 +244,7 @@
 
         try {
           if (cmd === 'help' || cmd === 'info') {
-            await termuxStreamLog([
-              '[INIT] Allocating system manual buffer...',
-              '[EXTRACTING] Reading command manifests from kernel index...',
-              '[DECRYPTING] Unpacking command parameters...'
-            ], 180);
-
+            await streamGitLogs(['[FETCHING COMMAND MANIFEST...]'], 100);
             log(`
               <div style="color: #38bdf8; font-weight: bold; margin-bottom: 4px;">AVAILABLE SYSTEM COMMANDS:</div>
               <div>- <b>messages</b> (or <b>inbox</b>) : Fetch encrypted message records securely via API</div>
@@ -265,18 +263,11 @@
           } else if (cmd === 'logout') {
             document.getElementById('logout-btn').click();
           } else if (cmd === 'status') {
-            await termuxStreamLog([
-              '[PING] Probing cluster endpoint health...',
-              '[SEC_AUTH] Validating service role credentials...'
-            ], 200);
+            await streamGitLogs(['[CHECKING CLUSTER HEALTH...]'], 120);
             await callAdminAPI('check');
             log('<span class="log-tag-success">[STATUS_OK]</span> Server-side authorization verified successfully.');
           } else if (cmd === 'sysinfo') {
-            await termuxStreamLog([
-              '[HARDWARE] Fetching CPU architecture and platform details...',
-              '[KERNEL] Inspecting active Vercel serverless environment...'
-            ], 180);
-
+            await streamGitLogs(['[GATHERING SYSTEM SPECS...]'], 120);
             log(`
               <div><b>SYSTEM KERNEL SPECIFICATION:</b></div>
               <div>- OS Kernel: Mountain-SecureOS v3.8-Hardened</div>
@@ -284,23 +275,22 @@
               <div>- Database: Supabase PostgreSQL Cloud Cluster</div>
             `);
           } else if (cmd === 'ping') {
-            await termuxStreamLog(['[ICMP] Sending 64 bytes to edge node...'], 150);
+            await streamGitLogs(['[PINGING EDGE NODE...]'], 100);
             const latency = Math.floor(Math.random() * 15) + 8;
             log('<span class="log-tag-success">[PONG]</span> Round-trip latency to Edge node: <b>' + latency + ' ms</b>');
           } else if (cmd === 'matrix') {
-            await termuxStreamLog(['[DUMP] Reading raw memory address 0x00F83C...'], 150);
-            log('<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100011 00101100 00100000 01001111 01001011</span>');
+            await streamGitLogs(['[DUMPING MEMORY BUFFER...]'], 100);
+            log('<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00101100 00100000 01001111 01001011</span>');
           } else if (cmd === 'history') {
-            await termuxStreamLog(['[CACHE] Reading active session command stack...'], 150);
             let histHtml = '<div><b>COMMAND HISTORY:</b></div>';
             cmdHistory.forEach((c, idx) => { histHtml += `<div>[${idx + 1}] ${esc(c)}</div>`; });
             log(histHtml);
           } else if (cmd === 'messages' || cmd === 'inbox') {
-            await termuxStreamLog([
-              '[API] Connecting to encrypted messages endpoint...',
-              '[QUERY] Executing SELECT * FROM messages ORDER BY created_at DESC...',
-              '[DECRYPT] Unpacking payload strings...'
-            ], 220);
+            await streamGitLogs([
+              'Enumerating messages: 100%, done.',
+              'Compressing payload buffers...',
+              'Writing objects to stream: done.'
+            ], 150);
 
             const res = await callAdminAPI('messages');
             if (!res.data || res.data.length === 0) {
@@ -320,10 +310,10 @@
               log(msgHtml);
             }
           } else if (cmd === 'visitors' || cmd === 'logs') {
-            await termuxStreamLog([
-              '[TELEMETRY] Requesting visitor logs stream...',
-              '[PARSE] Processing client IP & User-Agent fingerprints...'
-            ], 200);
+            await streamGitLogs([
+              'Counting visitor records: 100%, done.',
+              'Fetching telemetry stream...'
+            ], 150);
 
             const res = await callAdminAPI('visitors');
             if (!res.data || res.data.length === 0) {
@@ -345,15 +335,10 @@
             if (!arg) throw new Error('Usage: delmsg <id>');
             if (!confirm('Purge record ID #' + arg + ' from database?')) return;
             
-            await termuxStreamLog([
-              '[PURGE] Invoking row deletion protocol...',
-              '[DB_EXEC] DELETE FROM messages WHERE id = #' + arg + '...'
-            ], 200);
-
+            await streamGitLogs(['[PURGING DATABASE RECORD...]'], 120);
             await callAdminAPI('delmsg', { id: arg });
             log('<span class="log-tag-success">[SUCCESS]</span> Record ID <b>#' + esc(arg) + '</b> permanently wiped.');
           } else {
-            await termuxStreamLog(['[SEARCH] Scanning command index...'], 150);
             log('<span style="color: #ef4444;">[ERR_CMD]: \'' + esc(raw) + '\' not found. Type "help".</span>');
           }
         } catch (err) {
