@@ -2,7 +2,7 @@
 
 Mountain Indonesia adalah sebuah platform web portofolio dan informasi interaktif yang dirancang khusus untuk para pencinta alam, pendaki gunung, serta siapa saja yang ingin menjelajahi keindahan topografi dan pegunungan di nusantara. Website ini tidak hanya sekadar menyajikan daftar direktori gunung, tetapi juga dibangun dengan standar arsitektur pengembangan web modern yang mengutamakan performa tinggi, pengalaman pengguna yang mulus, serta sistem keamanan tingkat lanjut pada sisi pengolahan datanya.
 
-<img width="1188" height="700" alt="Tampilan Utama Mountain Indonesia" src="https://github.com/user-attachments/assets/5c32a5f6-0a16-472d-beb6-f1b2771aba8b" />
+<img width="1280" height="1280" alt="WhatsApp Image 2026-10-18 at 20 46 46" src="https://github.com/user-attachments/assets/10480733-0b0a-4a3b-9643-a3d0af5d32df" />
 
 ---
 
@@ -43,7 +43,7 @@ Salah satu fokus terbesar dalam pengembangan proyek ini adalah keamanan siber. S
 ## Arsitektur dan Teknologi yang Digunakan
 
 Proyek ini dibangun menggunakan kombinasi teknologi modern tanpa memerlukan framework berat yang rumit, sehingga waktu pemuatan halaman menjadi sangat cepat:
-- **Frontend Core**: Menggunakan HTML5 untuk kerangka semantik yang bersih, CSS3 murni untuk pengaturan tata letak fleksibel dan animasi gerakan, serta JavaScript modern (ES6+) untuk menangani seluruh logika interaktif, manipulasi DOM, dan komunikasi asinkron (Fetch API).
+- **Frontend Core**: Menggunakan HTML untuk kerangka semantik yang bersih, CSS murni untuk pengaturan tata letak fleksibel dan animasi gerakan, serta JavaScript modern (ES6+) untuk menangani seluruh logika interaktif, manipulasi DOM, dan komunikasi asinkron (Fetch API).
 - **External UI Libraries**: Memanfaatkan FontAwesome untuk ikon grafis yang tajam serta AOS (Animate On Scroll) untuk memberikan efek kemunculan elemen halaman yang elegan.
 - **Backend & Serverless**: Memanfaatkan Vercel Serverless Functions (`/api/...`) berbasis Node.js untuk mengeksekusi logika server secara aman di balik layar.
 - **Database Storage**: Menggunakan Supabase PostgreSQL Cloud Cluster untuk menyimpan data tabel komentar, pesan kontak, dan log aktivitas secara terstruktur.
