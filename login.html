@@ -177,7 +177,7 @@
         }
       });
 
-      document.getElementById('open-console').addEventListener('click', async () => {
+      window.goToAdminPanel = async () => {
         try {
           await callAdminAPI('check');
           document.getElementById('admin-terminal').hidden = false;
@@ -187,11 +187,12 @@
             <div class="log-line"><span class="log-tag-success">[SEC_OK]</span> Root user session authorized.</div>
             <div class="log-line" style="color: #94a3b8; border-bottom: 1px dashed rgba(56,189,248,0.2); padding-bottom: 6px; margin-top: 6px;">Type 'help' to display command manual.</div>
           `;
+          document.getElementById('admin-terminal').scrollIntoView({ behavior: 'smooth' });
           document.getElementById('terminal-cmd').focus();
         } catch (err) {
-          log('<span style="color: #ef4444;">[DENIED] ' + esc(err.message) + '</span>');
+          alert('[DENIED]: ' + err.message);
         }
-      });
+      };
 
       document.getElementById('logout-btn').addEventListener('click', () => {
         if (confirm('Confirm session termination?')) {
@@ -202,8 +203,6 @@
           alert('[SYSTEM]: Session closed safely.');
         }
       });
-
-      window.goToAdminPanel = () => { window.location.replace('index.html#contact'); };
 
       document.getElementById('command-form').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -254,7 +253,7 @@
             const latency = Math.floor(Math.random() * 15) + 8;
             log('<span class="log-tag-success">[PONG]</span> Round-trip latency to Edge node: <b>' + latency + ' ms</b>');
           } else if (cmd === 'matrix') {
-            log('<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100101 00101100 00100000 01001111 01001011</span>');
+            log('<span style="color: #22c55e;">01010011 01111001 01110011 01110100 01100101 01100101 01101101 00100000 01010011 01100101 01100011 01110101 01110010 01100011 00101100 00100000 01001111 01001011</span>');
           } else if (cmd === 'history') {
             let histHtml = '<div><b>COMMAND HISTORY:</b></div>';
             cmdHistory.forEach((c, idx) => { histHtml += `<div>[${idx + 1}] ${esc(c)}</div>`; });
