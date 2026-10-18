@@ -19,7 +19,6 @@ export default async function handler(req, res) {
       throw new Error('Server configuration error: Supabase keys missing');
     }
 
-    // 1. Simpan pesan ke database Supabase
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const { error: dbError } = await supabase
       .from('messages')
@@ -27,7 +26,6 @@ export default async function handler(req, res) {
 
     if (dbError) throw dbError;
 
-    // 2. Kirim notifikasi polos tanpa emoji ke Telegram Bot
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
 

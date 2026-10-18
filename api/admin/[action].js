@@ -24,7 +24,6 @@ export default async function handler(req, res) {
     auth: { persistSession: false, autoRefreshToken: false }
   });
 
-  // Login langsung cek username & password ke tabel 'admins'
   if (action === 'login') {
     const username = typeof req.body?.username === 'string' ? req.body.username.trim() : '';
     const password = typeof req.body?.password === 'string' ? req.body.password : '';
@@ -44,11 +43,9 @@ export default async function handler(req, res) {
       return reply(res, 401, { error: 'Invalid username or password' });
     }
 
-    // Berikan token sesi sukses ke frontend
     return reply(res, 200, { success: true, username: adminRow.username });
   }
 
-  // Untuk aksi lainnya (messages, visitors, delmsg, dll)
   try {
     if (action === 'check') return reply(res, 200, { ok: true });
     

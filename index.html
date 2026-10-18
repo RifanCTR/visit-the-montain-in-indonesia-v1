@@ -8,7 +8,6 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Proteksi Gambar: Mencegah klik tahan / save gambar */
     img.foto-gunung, .brand-logo-anchor img {
       -webkit-touch-callout: none !important;
       -webkit-user-select: none !important;
@@ -29,7 +28,6 @@
       margin-bottom: 20px !important;
     }
 
-    /* Grid Brand Outdoor */
     .brand-container-grid {
       margin: 20px auto 15px auto !important;
       width: 100%;
@@ -371,7 +369,6 @@
     <button id="tombol-cari-2" type="button" aria-label="Cari"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
   </div>
 
-  <!-- BARIS 1 SLIDER -->
   <div class="container-13">
     <div class="container-9" id="scroll-box-1">
       <div class="container-10" id="row-1">
@@ -394,7 +391,6 @@
     </div>
   </div>
 
-  <!-- BARIS 2 SLIDER -->
   <div class="container-13">
     <div class="container-9" id="scroll-box-2">
       <div class="container-11" id="row-2">
@@ -479,7 +475,6 @@
     let scrollSpeed1 = 0.5, scrollSpeed2 = -0.5;
     let singleWidth1 = 0, singleWidth2 = 0;
 
-    // Otomatis duplikat baris via JS agar HTML tetap bersih
     row1.innerHTML = row1.innerHTML + row1.innerHTML + row1.innerHTML;
     row2.innerHTML = row2.innerHTML + row2.innerHTML + row2.innerHTML;
 
@@ -492,7 +487,6 @@
       muatKomentar();
     });
 
-    // Auto Scroll Seamless tanpa jeda/patah
     function autoScroll() {
       if (!isPaused1 && singleWidth1 > 0) {
         box1.scrollLeft += scrollSpeed1;
@@ -515,7 +509,6 @@
     }
     requestAnimationFrame(autoScroll);
 
-    // Fitur Klik Tombol "VIEW MY WORK" mengarah ke Destination Recommendation
     viewWorkBtn.addEventListener('click', () => {
       const destinasiSection = document.getElementById('destinasi');
       destinasiSection.scrollIntoView({ behavior: 'smooth' });
