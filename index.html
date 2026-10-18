@@ -455,13 +455,8 @@
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     AOS.init();
-
-    const SUPABASE_URL = 'https://tobxthiynwepeylbblsv.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_icluCCVkHxsP8K2RfjE_4A_tCTX0B-F';
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const searchInput = document.getElementById('tombol-cari');
     const searchBtn = document.getElementById('tombol-cari-2');
@@ -577,74 +572,75 @@
       localStorage.setItem('device_voted_comments', JSON.stringify(votes));
     }
 
+    // Mengambil komentar melalui API Vercel Serverless (/api/comments) tanpa membocorkan Supabase Key di Frontend
     async function muatKomentar() {
       const container = document.getElementById('daftar-komentar');
       const countHeader = document.getElementById('total-comments');
 
-      const { data: comments, error } = await _supabase
-        .from('comments')
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        const response = await fetch('/api/comments');
+        const result = await response.json();
 
-      if (error) {
-        container.innerHTML = '<p style="color: #aaa; font-size: 12px;">Gagal memuat komentar.</p>';
-        return;
-      }
+        if (!response.ok || !result.success) throw new Error('Gagal memuat');
 
-      countHeader.textContent = `${comments ? comments.length : 0} Komentar`;
-      container.innerHTML = '';
+        const comments = result.data || [];
+        countHeader.textContent = `${comments.length} Komentar`;
+        container.innerHTML = '';
 
-      if (!comments || comments.length === 0) {
-        container.innerHTML = '<p style="color: #aaa; font-size: 12px;">Belum ada komentar.</p>';
-        return;
-      }
-
-      const isAdmin = localStorage.getItem('is_admin') === 'true';
-      const userVotes = getVotedComments();
-
-      comments.forEach((item) => {
-        const char = item.nama ? item.nama.charAt(0).toUpperCase() : '?';
-        const color = getAvatarColor(item.nama || 'A');
-        const likesCount = item.likes || 0;
-        const dislikesCount = item.dislikes || 0;
-        const myVote = userVotes[item.id];
-
-        const div = document.createElement('div');
-        div.className = 'yt-comment-item';
-
-        let moreMenuHTML = '';
-        if (isAdmin) {
-          moreMenuHTML = `
-            <div class="yt-more-menu">
-              <button class="yt-more-btn" onclick="toggleDropdown(${item.id})"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-              <div class="yt-dropdown-menu" id="dropdown-${item.id}">
-                <div class="yt-dropdown-item" onclick="hapusKomentar(${item.id})">
-                  <i class="fa-solid fa-trash"></i> Hapus
-                </div>
-              </div>
-            </div>
-          `;
+        if (comments.length === 0) {
+          container.innerHTML = '<p style="color: #aaa; font-size: 12px;">Belum ada komentar.</p>';
+          return;
         }
 
-        div.innerHTML = `
-          <div class="yt-comment-avatar" style="background: ${color};">${char}</div>
-          <div class="yt-comment-body">
-            <div class="yt-comment-author">${escapeHtml(item.nama)}</div>
-            <div class="yt-comment-text">${escapeHtml(item.pesan)}</div>
-            <div class="yt-comment-actions">
-              <button class="yt-action-btn ${myVote === 'like' ? 'active' : ''}" onclick="handleReaction(${item.id}, 'like', ${likesCount}, ${dislikesCount})">
-                <i class="${myVote === 'like' ? 'fa-solid' : 'fa-regular'} fa-thumbs-up"></i> 
-                <span>${likesCount > 0 ? likesCount : ''}</span>
-              </button>
-              <button class="yt-action-btn ${myVote === 'dislike' ? 'active' : ''}" onclick="handleReaction(${item.id}, 'dislike', ${likesCount}, ${dislikesCount})">
-                <i class="${myVote === 'dislike' ? 'fa-solid' : 'fa-regular'} fa-thumbs-down"></i>
-              </button>
+        const isAdmin = localStorage.getItem('is_admin') === 'true';
+        const userVotes = getVotedComments();
+
+        comments.forEach((item) => {
+          const char = item.nama ? item.nama.charAt(0).toUpperCase() : '?';
+          const color = getAvatarColor(item.nama || 'A');
+          const likesCount = item.likes || 0;
+          const dislikesCount = item.dislikes || 0;
+          const myVote = userVotes[item.id];
+
+          const div = document.createElement('div');
+          div.className = 'yt-comment-item';
+
+          let moreMenuHTML = '';
+          if (isAdmin) {
+            moreMenuHTML = `
+              <div class="yt-more-menu">
+                <button class="yt-more-btn" onclick="toggleDropdown(${item.id})"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                <div class="yt-dropdown-menu" id="dropdown-${item.id}">
+                  <div class="yt-dropdown-item" onclick="hapusKomentar(${item.id})">
+                    <i class="fa-solid fa-trash"></i> Hapus
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+
+          div.innerHTML = `
+            <div class="yt-comment-avatar" style="background: ${color};">${char}</div>
+            <div class="yt-comment-body">
+              <div class="yt-comment-author">${escapeHtml(item.nama)}</div>
+              <div class="yt-comment-text">${escapeHtml(item.pesan)}</div>
+              <div class="yt-comment-actions">
+                <button class="yt-action-btn ${myVote === 'like' ? 'active' : ''}" onclick="handleReaction(${item.id}, 'like', ${likesCount}, ${dislikesCount})">
+                  <i class="${myVote === 'like' ? 'fa-solid' : 'fa-regular'} fa-thumbs-up"></i> 
+                  <span>${likesCount > 0 ? likesCount : ''}</span>
+                </button>
+                <button class="yt-action-btn ${myVote === 'dislike' ? 'active' : ''}" onclick="handleReaction(${item.id}, 'dislike', ${likesCount}, ${dislikesCount})">
+                  <i class="${myVote === 'dislike' ? 'fa-solid' : 'fa-regular'} fa-thumbs-down"></i>
+                </button>
+              </div>
             </div>
-          </div>
-          ${moreMenuHTML}
-        `;
-        container.appendChild(div);
-      });
+            ${moreMenuHTML}
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        container.innerHTML = '<p style="color: #aaa; font-size: 12px;">Gagal memuat komentar.</p>';
+      }
     }
 
     async function kirimKomentar() {
@@ -659,15 +655,22 @@
         return;
       }
 
-      const { error } = await _supabase
-        .from('comments')
-        .insert([{ nama: nama, pesan: pesan, likes: 0, dislikes: 0 }]);
+      try {
+        const response = await fetch('/api/comments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nama, pesan })
+        });
 
-      if (error) {
+        const result = await response.json();
+        if (response.ok && result.success) {
+          resetForm();
+          muatKomentar();
+        } else {
+          alert('Gagal mengirim komentar.');
+        }
+      } catch (err) {
         alert('Gagal mengirim komentar.');
-      } else {
-        resetForm();
-        muatKomentar();
       }
     }
 
@@ -701,14 +704,19 @@
         if (type === 'dislike') newDislikes = currentDislikes + 1;
       }
 
-      const { error } = await _supabase
-        .from('comments')
-        .update({ likes: newLikes, dislikes: newDislikes })
-        .eq('id', id);
+      try {
+        const response = await fetch('/api/comments', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, likes: newLikes, dislikes: newDislikes })
+        });
 
-      if (!error) {
-        setVotedComment(id, newVoteType);
-        muatKomentar();
+        if (response.ok) {
+          setVotedComment(id, newVoteType);
+          muatKomentar();
+        }
+      } catch (err) {
+        console.error('Reaction error:', err);
       }
     }
 
@@ -722,10 +730,18 @@
 
     async function hapusKomentar(id) {
       if (!confirm('Hapus komentar ini secara permanen?')) return;
-      const { error } = await _supabase.from('comments').delete().eq('id', id);
-      if (!error) {
-        muatKomentar();
-      } else {
+      try {
+        const response = await fetch('/api/admin/delcomment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        if (response.ok) {
+          muatKomentar();
+        } else {
+          alert('Gagal menghapus komentar!');
+        }
+      } catch (err) {
         alert('Gagal menghapus komentar!');
       }
     }
@@ -738,7 +754,7 @@
 
     function escapeHtml(text) {
       const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+      return String(text || '').replace(/[&<>"']/g, function(m) { return map[m]; });
     }
     
     console.log("WAAH KEPO BET LU JADI ORANG\nGak usah ngereceh nyari celah di sini, bree. Kalo emang kurang kerjaan, coba lu ketik git() terus ENTER");
